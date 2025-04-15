@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/advices.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <script src="../js/advices.js" defer></script>
+</head>
+<body class="map-page">
+  <header class="main-header hact">
+      <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo lact" /></a>
+      <nav class="nav-menu">
+        <a href="./index.html">Home</a>
+        <a href="#">Companies</a>
+        <a href="./map.html">Map</a>
+        <a href="./advices.html" class="active">Advices</a>
+        <a href="./trust.html">trust</a>
+      </nav>
+      <div class="gara" style="width: 110px;"></div>
+  </header>
+  <div class="main">
+    <div class="robotbox">
+      <div class="text-box">
+          <p class="ro-text">안전한 전세계약의 첫 걸음</p>
+          <p class="ro-text"></strong>하우봇</strong>과 대화하며 위험 요소를 하나씩 점검해보세요!</p>
+      </div>
+      <ul class="menu">
+        <div class="robot"></div>
+        <li class ='gpt-start' style="--i:0" data-type="깡통전세">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/can.png);"></div>
+            <p>깡통전세</p>
+          </div>
+        </li>
+    
+        <li class ='gpt-start' li style="--i:1"  data-type="위조계약">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/fake.png);"></div>
+            <p>위조 계약</p>
+          </div>
+        </li>
+        <li class ='gpt-start' li style="--i:2" data-type="이중계약">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/double.png);"></div>
+            <p>이중 계약</p>
+          </div>
+        </li>
+        <li class ='gpt-start' li style="--i:3" data-type="명의신탁">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/other.png);"></div>
+            <p>명의 신탁</p>
+          </div>
+        </li>
+        <li class ='gpt-start' li style="--i:4" data-type="보증보험 악용">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/bo.png);"></div>
+            <p>보증보험 악용</p>
+          </div>
+        </li>
+        <li class ='gpt-start' li style="--i:5" data-type="">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/apa.png);"></div>
+            <p>분양형 사기</p>
+          </div>
+        </li>
+        <li class ='gpt-start' li style="--i:6" data-type="위장 임대인">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/we.png);"></div>
+            <p>위장 임대인</p>
+          </div>
+        </li>
+        <li class ='gpt-start' li style="--i:7" data-type="전세권 미설정">
+          <div class="robot-menu">
+            <div class="menu-img" style="background-image: url(../../assets/noset.png);"></div>
+            <p>진세권 미설정</p>
+          </div>
+        </li>
+      </ul>
+      <div id="overlay" class="overlay"></div> 
+      <div class="chat-answer" id="chat-modal">
+        
+        <div id="chat-box"></div>
+        <div id="chat-loading" style="display: none;">💬 하우봇이 응답 중입니다...</div>
+        <div id="chat-input-box">
+        <input type="text" id="chat-input" placeholder="답변을 입력하세요." />
+        <button onclick="sendChat()">전송</button>
+        <button id="close-chat-btn" class="exit-btn" title="대화 종료">종료</button>
+        </div>
+      </div>
+      
+      <button class="robot-btn">시작</button> 
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,295 @@
+:root {
+    --main-color: #6363DD;
+    --bg-color: #F9FAFB;
+    --text-dark: #1E1E1E;
+    --text-light: #666666;
+  }
+  
+  body {
+    margin: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-dark);
+  }
+  
+  .main-header {
+    position: relative;
+    text-align: center;
+    background-color: white;
+    padding: 1rem;
+  }
+  
+  .logo {
+    width: 180px;
+    margin: 0 auto 1rem;
+    display: block;
+  }
+  
+  .auth-top {
+    position: absolute;
+    top: 1rem;
+    right: 2rem;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .auth-link {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.9rem;
+    color: var(--main-color);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .auth-link:hover {
+    color: #4b4bcf;
+  }
+  
+  .nav-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .nav-menu a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 0.5rem;
+  }
+  
+  .nav-menu a.active {
+    border-bottom: 2px solid var(--main-color);
+    color: var(--main-color);
+  }
+  
+  /* 신뢰검사 페이지 전체 레이아웃 */
+  .trust-page {
+    padding: 3rem 1rem;
+    max-width: 1200px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .trust-page h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  .trust-page .subtitle {
+    color: var(--text-light);
+    margin-bottom: 2rem;
+  }
+  
+  /* 좌우 2단 영역 */
+  .trust-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .trust-left,
+  .trust-right {
+    flex: 1 1 45%;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-sizing: border-box;
+  }
+  
+  /* 모바일 반응형 */
+  @media screen and (max-width: 768px) {
+    .trust-left,
+    .trust-right {
+      flex: 1 1 100%;
+    }
+  }
+  
+  /* 업로드 박스 */
+  .upload-box {
+    text-align: center;
+    border: 2px dashed #ccc;
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    background-color: #fff;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  
+  .upload-box.drag-over {
+    border-color: var(--main-color);
+    background-color: #f0edff;
+  }
+  
+  .upload-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .upload-label {
+    display: inline-block;
+    font-size: 1rem;
+    color: #333;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s, border-color 0.3s;
+    text-decoration: underline;
+  }
+  .upload-click-area{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: color 0.3s;
+  }
+  .upload-label:hover {
+    color: #6c63ff;              
+          
+  }
+  .file-input {
+    display: none;
+  }
+  
+  /* .file-name {
+    font-size: 1rem;
+    color: #555;
+    margin-top: 0.5rem;
+  } */
+  .file-name {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: #999;
+    transition: color 0.3s;
+  }
+
+  .clear-btn {
+    margin-top: 5px;
+    padding: 4px 10px;
+    font-size: 0.85rem;
+    border: none;
+    background-color: #eee;
+    color: #333;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .clear-btn:hover {
+    background-color: #ddd;
+  }
+  
+
+  /* 계약 정보 입력 */
+  .trust-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 1rem;
+    text-align: left;
+  }
+  
+  .trust-form input,
+  .trust-form select {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.8rem;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    white-space: nowrap;
+  }
+  
+  #start-check-btn {
+    background-color: #6363DD;         /* 보라 계열 포인트 색 */
+    color: white;                      /* 글자색 */
+    border: none;
+    border-radius: 8px;                /* 둥근 모서리 */
+    padding: 12px 24px;                /* 안쪽 여백 */
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(92, 78, 252, 0.2); /* 그림자 */
+  }
+  
+  #start-check-btn:hover {
+    background-color: #4538d8;         
+    transform: translateY(-2px);       
+  }
+  
+  /* 리포트 영역 */
+  .trust-report {
+    display: none;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    max-width: 2000px;
+    margin: auto;
+    text-align: center;
+    border-top: 1px solid #eee;
+  }
+  
+  .trust-report h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  .trust-form label {
+    font-size: 1.2rem;
+    font-weight: 500;
+   
+  }
+  .trust-report .report-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-left: 3rem;
+    margin-right: 3rem;
+  }
+  
+  .trust-report button {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 999px;
+    padding: 0.5rem 1.2rem;
+    cursor: pointer;
+  }
+  
+  /* 다음 버튼 */
+  .main-button {
+    margin-top: 1rem;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  
+  .main-button:hover {
+    background-color: #4b4bcf;
+  }
+  

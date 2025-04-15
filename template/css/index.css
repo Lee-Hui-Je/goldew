@@ -1,0 +1,652 @@
+:root {
+  --main-color: #6363DD;
+  --bg-color: #F9FAFB;
+  --text-dark: #1E1E1E;
+  --text-light: #666666;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+}
+
+.main-header {
+  position: relative;
+  text-align: center;
+  background-color: white;
+  padding: 1rem;
+}
+
+.logo {
+  width: 180px;
+  margin: 0 auto 1rem;
+  display: block;
+}
+
+.auth-top, .auth-top-loggedin {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.auth-link {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  color: var(--main-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-link:hover {
+  color: #4b4bcf;
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem;
+}
+
+.nav-menu a.active {
+  border-bottom: 2px solid var(--main-color);
+  color: var(--main-color);
+}
+
+.hero-img {
+  width: 100%;
+  max-width: 1000px;
+  display: block;
+  margin: 0 auto;
+  border-radius: 0 0 32px 32px;
+}
+
+.hero-content {
+  text-align: center;
+  padding: 2.5rem 1rem 3rem;
+}
+
+.hero-content h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.hero-content .highlight {
+  color: var(--main-color);
+}
+
+.card-section {
+  padding: 3rem 1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.card {
+  background: white;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.icon-circle {
+  font-size: 1.8rem;
+  background: #EFF0FF;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  border-radius: 50%;
+  margin: 0 auto 1rem;
+}
+
+.card h3 {
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.card p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.card-btn {
+  background: var(--main-color);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.about-hows-slider {
+  background-color: #f4f5ff;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+.about-hows-slider .highlight{
+  color: var(--main-color);
+}
+.about-hows-slider h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.about-slide {
+  background: white;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(99, 99, 221, 0.1);
+  width: 100%;
+  max-width: 500px;
+  display: none;
+  transition: opacity 0.3s ease;
+}
+
+.about-slide.active {
+  display: block;
+}
+
+.about-slide h3 {
+  font-size: 1.8rem;
+  color: #6363DD;
+  margin-bottom: 1rem;
+}
+
+.about-slide p {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.nav-btn {
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.cta-banner {
+  background: transparent;
+  padding: 4rem 1rem;
+}
+
+.cta-inner {
+  background: var(--main-color);
+  color: white;
+  padding: 3rem 10rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-radius: 2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 300px;
+}
+
+.cta-text {
+  flex: 1 1 480px;
+}
+
+.cta-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.cta-text p {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+}
+
+.cta-image {
+  flex: 1 1 400px;
+  text-align: center;
+}
+
+.cta-image img {
+  width: 100%;
+  max-width: 320px;
+  border-radius: 1rem;
+  
+}
+
+footer {
+  background-color: #f1f1f1;
+  padding: 3rem 1rem;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.footer-logo img {
+  width: 120px;
+}
+
+.footer-columns {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.footer-columns h4 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-columns ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-columns ul li {
+  margin-bottom: 0.4rem;
+}
+
+.footer-columns ul li a {
+  text-decoration: none;
+  color: #444;
+}
+
+.footer-columns ul li a:hover {
+  color: var(--main-color);
+}
+
+.footer-newsletter form {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.footer-newsletter input {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  flex: 1;
+  min-width: 200px;
+}
+
+.footer-newsletter button {
+  background: var(--main-color);
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-box {
+  width: 1080px;
+  height: 600px;
+  background: white;
+  margin: 4% auto;
+  display: flex;
+  border-radius: 14px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 30px rgba(0,0,0,0.3);
+}
+
+.modal-left {
+  flex: 1;
+  background: url("../assets/hows_logo.png") no-repeat center center;
+  background-size: 50%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+}
+
+
+.modal-left a {
+  color: #686363;
+  text-decoration: underline;
+  font-size: 0.9em;
+}
+
+.modal-right {
+  flex: 1;
+  background-color: #eceef0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+}
+
+.login-form {
+  background-color: white;
+  padding: 60px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.login-form h2 {
+  margin-bottom: 30px;
+  font-size: 2em;
+  text-align: center;
+}
+
+.login-form input[type="text"],
+.login-form input[type="password"] {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 20px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.login-form .forgot {
+  text-align: right;
+  font-size: 0.9em;
+  margin-bottom: 14px;
+  color: #696565;
+}
+
+.login-form input[type="submit"] {
+  width: 50%;
+  background-color: #6363DD;
+  color: white;
+  padding: 14px;
+  font-size: 1em;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: 25px auto 0 auto
+}
+.login-form input[type="submit"]:hover {
+  background-color: #d4d4d4;
+}
+.close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  color: #333;
+  cursor: pointer;
+}
+
+
+/* join */
+.modal-box-join,.modal-box-edit{
+  width: 500px;
+  max-width: 90%;
+  height: auto;
+  background: #fdfeff;
+  margin: 5% auto;
+  border-radius: 5px;
+  padding: 110px 45px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  position: relative;
+
+  /* 추가: 내부 중앙 정렬을 위한 flex */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.join-form,.edit-form {
+  width: 100%;
+  max-width: 350px; 
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.edit-form h1 {
+  text-align: center;
+}
+.modal {
+display: none;
+position: fixed;
+z-index: 1000;
+left: 0; top: 0;
+width: 100%; height: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+position: relative;
+width: 500px;
+height: 600px;
+margin: 5% auto;
+padding: 40px;
+background: white url("assets/hows_logo.png") no-repeat center center;
+background-size: 60%;
+background-blend-mode: lighten;
+border-radius: 12px;
+box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+.modal-content::before {
+content: "";
+position: absolute;
+inset: 0;
+background-color: rgba(255,255,255,0.8); /* 흐릿하게 덮기 */
+z-index: 0;
+border-radius: 12px;
+}
+
+.modal-content * {
+position: relative;
+z-index: 1; /* 위로 올리기 */
+}
+
+.modal-content h2 {
+text-align: center;
+margin-bottom: 20px;
+color: #6363DD;
+}
+
+.join-form,.edit-form {
+display: flex;
+flex-direction: column;
+gap: 12px;
+}
+
+.join-form input,.edit-form input {
+padding: 12px;
+border-radius: 6px;
+border: 1px solid #ccc;
+font-size: 1em;
+}
+
+.join-form button,.edit-form button {
+padding: 10px;
+width: 50%;
+background-color: #6363DD;
+color: white;
+border: none;
+border-radius: 6px;
+font-size: 0.95em;
+cursor: pointer;
+transition: background-color 0.3s;
+margin: 20px auto 0 auto
+}
+
+.join-form button:hover,.edit-form button:hover {
+background-color:  #d4d4d4;
+}
+
+
+
+/* 설명 모달 */
+
+.modal-scam {
+display: none;
+position: fixed;
+top: 0; left: 0;
+width: 100%; height: 100%;
+background: rgba(0, 0, 0, 0.5);
+z-index: 1000;
+display: flex;
+justify-content: center;     
+align-items: center;          
+padding: 1rem;
+}
+
+.modal-scam-content {
+max-width: 600px;
+width: 100%;
+background: white;
+border-radius: 16px;
+padding: 2rem;
+text-align: left;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+animation: fadeIn 0.3s ease-in-out;
+}
+
+
+.modal-scam-content h3 {
+font-size: 1.6rem;
+color: #333;
+margin-bottom: 1rem;
+text-align: center;
+}
+
+.modal-scam-content h4 {
+font-size: 1.05rem;
+color: #6363DD;
+margin-bottom: 0.3rem;
+}
+
+.modal-scam-content p,
+.modal-scam-content ul {
+font-size: 0.95rem;
+color: #444;
+line-height: 1.6;
+margin-top: 0;
+}
+
+.modal-scam-content ul {
+padding-left: 1.2rem;
+list-style-type: disc;
+margin-top: 0.5rem;
+}
+
+.modal-scam-content .modal-close {
+display: block;
+background: #6363DD;
+color: white;
+padding: 0.5rem 1.2rem;
+border-radius: 999px;
+font-size: 0.9rem;
+border: none;
+cursor: pointer;
+margin-top: 2rem;
+margin: 2rem auto 0 auto; 
+
+}
+
+.modal-scam-content .modal-close:hover {
+background-color: #4d4dcf;
+}
+
+.modal-icon-title {
+text-align: center;
+margin-bottom: 1rem;
+}
+
+.modal-icon-title .icon {
+font-size: 2.5rem;
+margin-bottom: 0.5rem;
+}
+
+.modal-icon-title h3 {
+font-size: 1.6rem;
+font-weight: 700;
+color: #333;
+margin: 0;
+}
+
+.modal-subdesc {
+font-size: 1rem;
+color: #050505;
+line-height: 1.6;
+text-align: center;
+margin-bottom: 1.5rem;
+}
+.modal-subdesc.highlight-box {
+background: #f6f6ff;
+
+padding: 1rem;
+font-weight: 500;
+line-height: 1.6;
+color: #333;
+margin-bottom: 1.5rem;
+border-radius: 8px;
+}
+
+
+@media (max-width: 1270px){
+  .cta-text{
+    text-align: center;
+  }
+}

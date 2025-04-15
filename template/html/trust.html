@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>임대인 신뢰 검사 - HOWS</title>
+  <link rel="stylesheet" href="../css/trust.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <script src="../js/trust.js" defer></script>
+</head>
+
+    <body>
+        <header class="main-header">
+          <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo" /></a>
+          <nav class="nav-menu">
+            <a href="./index.html">Home</a>
+            <a href="#">Companies</a>
+            <a href="./map.html">Map</a>
+            <a href="./advices.html">Advices</a>
+            <a href="./trust.html" class="active">trust</a>
+          </nav>
+        </header>
+        
+  <main class="trust-page">
+    <h1>임대인 신뢰 검사</h1>
+    <p class="subtitle">등기부등본과 계약 관련 정보를 입력하세요.</p>
+
+    <!-- 좌우 나뉜 두 개의 영역 -->
+    <div class="trust-row">
+      <!-- 왼쪽: 파일 첨부 -->
+      <section class="trust-left">
+        <h2>파일 첨부</h2>
+
+        <div class="upload-box">
+          <label for="file1" class="upload-click-area">
+          <div class="upload-icon">⬆️</div>
+          <div class="upload-label">등기부등본 업로드</div>
+          </label>
+          <button type="button" class="clear-btn" style="display: none;">삭제</button>
+          <input type="file" id="file1" class="file-input" accept=".pdf,image/*" style="display: none;" />
+          <p class="file-name"></p>
+        </div>
+        
+        <div class="upload-box">
+          <label for="file2" class="upload-click-area">
+          <div class="upload-icon">📄</div>
+          <div class="upload-label">계약서 업로드</div>
+          </label>
+          <button type="button" class="clear-btn" style="display: none;">삭제</button>
+          <input type="file" id="file2" class="file-input" accept=".pdf,image/*" style="display: none;" />
+          <p class="file-name"></p>
+        </div>
+        <div class="upload-box">
+          <label for="file3" class="upload-click-area">
+          <div class="upload-icon">📇</div>
+          <div class="upload-label">추가자료 업로드</div>
+          </label>
+          <button type="button" class="clear-btn" style="display: none;">삭제</button>
+          <input type="file" id="file3" class="file-input" accept=".pdf,image/*" style="display: none;" />
+          <p class="file-name"></p>
+        </div>
+
+    
+      </section>
+
+      <!-- 오른쪽: 계약 정보 -->
+      <section class="trust-right">
+        <h2>추가 정보 입력</h2>
+        <form class="trust-form">
+          <label for="own_name">임대인 이름</label>
+          <input type="text" placeholder="임대인 이름" />
+          
+            <label for="date">계약날짜</label>
+            <input type="date" />
+            <label for="money">보증금 금액</label>
+          <input type="text" placeholder="보증금 (원)" />
+          
+          <label for="address">임대차 주소</label>
+          <input type="text" placeholder="임대차 주소" />
+          </div>
+        </form>
+      </section>
+      
+    </div>
+
+    <section class="trust-check">
+      <button id="start-check-btn">분석하기</button>
+    </section>
+    
+    <!-- 아래쪽: 리포트 영역 -->
+    <section class="trust-report">
+      <h3>신뢰도 리포트</h3>
+      <div class="report-row">
+        <span>위험도: ⭐⭐⭐⭐☆</span>
+        <button>리포트 보기</button>
+      </div>
+      
+    </section>
+  </main>
+
+
+</body>
+</html>

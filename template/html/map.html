@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOWS 지도</title>
+  <link rel="stylesheet" href="../css/map.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <script src="../js/map.js" defer></script>
+  <link rel="icon" href="/favicon.ico" />
+  <style>
+    .marker.high { color: red; font-size: 20px; }
+    .marker.medium { color: orange; font-size: 20px; }
+    .marker.low { color: green; font-size: 20px; }
+    .map-info-window { font-size: 14px; line-height: 1.4; }
+  </style>
+</head>
+<body class="map-page">
+
+  <!-- 헤더 -->
+  <header class="main-header">
+    <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo" /></a>
+    <nav class="nav-menu">
+      <a href="./index.html">Home</a>
+      <a href="#">Companies</a>
+      <a href="./map.html" class="active">Map</a>
+      <a href="./advices.html">Advices</a>
+      <a href="./trust.html">trust</a>
+    </nav>
+    <div class="gara" style="width: 110px;"></div>
+  </header>
+  
+
+
+  <!-- 메인 컨테이너 -->
+  <main class="map-container">
+
+    <!-- 지도 + 검색창 -->
+    <section class="map-box">
+      <div id="map"></div>
+
+      <div class="map-toolbar">
+        <input type="text" id="address-input" placeholder="📍 주소 검색" />
+        <button class="filter-btn active">위험도</button>
+        <button class="filter-btn">실매물</button>
+      </div>
+    </section>
+
+    <!-- 오른쪽 패널 -->
+    <aside class="info-panel">
+      <div class="back-box">
+        <div class="back"></div>
+        <p class="adress-info">광주 광역시 신가동</p>
+        <div class="opa-op"></div>
+      </div>
+      <h2>📄 실거래 내역</h2>
+      <div class="deal-card">
+        <h3>상무대로 123</h3>
+        <p>매매가: 5억 / 전세가: 2.5억</p>
+        <p>위험도: <span class="stars">★★★☆☆</span> <span class="level">(중간)</span></p>
+        <p class="date">등록일: 2024.04.01</p>
+      </div>
+
+      <div class="deal-card">
+        <h3>상무대로 3423</h3>
+        <p>매매가: 8억 / 전세가: 2.5억</p>
+        <p>위험도: <span class="stars">★★★★☆</span> <span class="level">(높음)</span></p>
+        <p class="date">등록일: 2024.04.01</p>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 네이버 지도 API -->
+  <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fdq7mn54zc&submodules=geocoder"></script>
+</body>
+</html>

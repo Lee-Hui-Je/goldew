@@ -1,0 +1,415 @@
+:root {
+    --main-color: #6363dd;
+    --bg-color: #F9FAFB;
+    --text-dark: #1E1E1E;
+    --text-light: #666666;
+}
+*{
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+margin: 0;
+font-family: 'Noto Sans KR', sans-serif;
+background-color: var(--bg-color);
+color: var(--text-dark);
+background-image: url(../../assets/adbicesbg.png);
+background-size: cover;
+background-position: center center;
+}
+
+.map-page {
+font-family: 'Noto Sans KR', sans-serif;
+background-color: var(--bg-color);
+color: var(--text-dark);
+}
+
+.main-header {
+position: relative;
+width: 100vw;
+height: 200px;
+display: flex;
+flex-direction: column;
+align-items: center;
+padding: 1rem 2rem;
+background: white;
+box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+z-index: 2;
+}
+
+/* 반응형 */
+/* aact*/
+/* header */
+.main-header.hact{
+flex-direction: row;
+height: 60px;
+justify-content: space-between;
+opacity: 0.7;
+}
+
+
+.auth-top {
+position: absolute;
+top: 1rem;
+right: 2rem;
+display: flex;
+gap: 1rem;
+}
+/* aact */
+/* auth-top */
+.tact{
+position: static;
+}
+
+
+
+.auth-link {
+display: flex;
+align-items: center;
+gap: 0.3rem;
+font-size: 0.9rem;
+color: var(--main-color);
+text-decoration: none;
+font-weight: 500;
+}
+
+.auth-link:hover {
+color: #4b4bcf;
+}
+
+.logo {
+width: 180px;
+margin: 0 auto 1rem;
+display: block;
+}
+/* aact */
+.lact{
+margin: 0;
+width: 60px;
+}
+
+.nav-menu {
+display: flex;
+justify-content: center;
+align-items: center;
+flex-wrap: wrap;
+gap: 1.5rem;
+font-size: 1rem;
+}
+
+.nav-menu a {
+text-decoration: none;
+color: #333;
+font-weight: 500;
+padding: 0.5rem;
+}
+
+.nav-menu a.active {
+border-bottom: 2px solid var(--main-color);
+color: var(--main-color);
+}
+
+/* main */
+
+.main{
+position: relative;
+width: 100vw;
+height: calc(100vh - 60px);
+display: flex;
+}
+.main .robotbox{
+    position: absolute;
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-60%);
+}
+.main .robotbox .text-box {
+  color: #000;
+  width: 620px;
+  height: 90px;
+  padding: 16px;
+  border-radius: 16px;
+  position: relative;
+  font-size: 18px;
+  text-align: center;
+  box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.05),
+  10px 15px 10px rgba(0, 0, 0, 0.1),
+  inset -5px -5px 10px rgba(255, 255, 255, 1);
+  opacity: 1;
+  transition: opacity .5s;
+}
+
+.main .robotbox .robot{
+position: absolute;
+background-image: url(../../assets/c_robot3.gif);
+background-repeat: no-repeat;
+background-size: contain;
+background-position: center center;
+width: 400px;
+height: 400px;
+opacity: 1;
+transition:.5s;
+}
+
+.main .robotbox{
+    opacity: 1;
+    transition: opacity 1s;
+}
+.main .robotbox .robot-btn{
+    position: relative;
+    font-size: 16px;
+    width: 70px;
+    height: 40px;
+    border: none;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.05),
+    10px 15px 10px rgba(0, 0, 0, 0.1),
+    inset -5px -5px 10px rgba(255, 255, 255, 1);
+    color: #000;
+    padding: 16px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity .5s;
+}
+
+.main .robotbox .robot-btn:hover{
+    background-color: #dadada;
+}
+
+.menu{
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.menu li{
+    position: absolute;
+    list-style: none;
+    transform-origin: 140px;
+    left: 10px;
+    transform: rotate(calc(360deg / 8 * var(--i))) translateX(-200px);
+    z-index: 5;
+    pointer-events: none;
+    scale: 0;
+    transition: scale .5s, opacity .5s;
+    transition-delay: calc(.1s * var(--i));
+}
+
+.menu.active li{
+    scale: 1;
+    pointer-events: initial;
+}
+.menu li .robot-menu{
+    transform: rotate(calc(360deg / -8 * var(--i)));
+    background-color: #4b4bcf00;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 100px;
+    border-radius: 20px;
+    color: #000;
+    box-shadow: inset 5px 5px 10px rgba(0, 0, 0, 0.05),
+    10px 15px 10px rgba(0, 0, 0, 0.1),
+    inset -5px -5px 10px rgba(255, 255, 255, 1);
+}
+.menu li .robot-menu:hover{
+  background-color: rgb(231, 231, 231);
+}
+
+
+.menu li .robot-menu .menu-img{
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center center;
+    width: 30px;
+    height: 30px;
+}
+
+
+#overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    z-index: 900;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease;
+  }
+  
+  #overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .chat-answer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+    width: 700px;
+    height: 700px; 
+    max-height: 90vh;   
+    padding: 2rem;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow: hidden;
+    transform: translate(-10%, -50%);
+    opacity: 0;
+    transition: .5s;
+    visibility: hidden;
+  }
+  
+  
+  
+  .chat-answer.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  #chat-box {
+    flex: 1;  
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 1rem;
+    border-radius: 8px;
+    background: #fafafa;
+    font-size: 0.95rem;
+  }
+  
+  #chat-input-box {
+    display: flex;
+    justify-content: center;   /* ✅ 가운데 정렬 */
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  #chat-input-box button {
+    padding: 0.7rem 1.4rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 999px;
+    background-color: #6363dd;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #chat-input-box button:hover {
+    background-color: #4b4bcf;
+  }
+  #chat-input {
+    flex: 1;
+    max-width: 400px;         
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 999px;       
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .exit-btn {
+    font-size: 2.1rem;  /* 네모 아이콘 더 크게! */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.7rem 1.4rem;
+  }
+  
+  .exit-btn:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+  }
+  
+  #chat-input:focus {
+    border-color: var(--main-color);
+  }
+  
+  #chat-input-box button {
+    padding: 0.75rem 1.5rem;
+    background-color: var(--main-color);
+    color: white;
+    border: none;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #chat-input-box button:hover {
+    background-color: #4b4bcf;
+  }
+  
+  
+  .user-msg, .gpt-msg {
+    margin: 0.3rem 0;
+    padding: 0.6rem;
+    border-radius: 8px;
+    max-width: 100%;
+  }
+  
+  .user-msg {
+    background: #d9ecff;
+    align-self: flex-end;
+    text-align: right;
+  }
+  
+  .gpt-msg {
+    background: #f2f2f2;
+    align-self: flex-start;
+  }
+  
+  #chat-loading {
+    font-style: italic;
+    color: #999;
+    text-align: center;
+  }
+  
+  .robot-menu {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .robot-menu:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+@media (max-width: 1270px){
+    .chat-answer {
+      transform: translate(-20%, -50%) scale(0.8);
+    }
+    .menu li{
+      transform: rotate(calc(360deg / 8 * var(--i))) translateX(-150px) scale(.8);
+    }
+    .main .robotbox .robot{
+      width: 300px;
+      height: 300px;
+    }
+    .main .robotbox{
+      transform: translate(-50%,-50%);
+    }
+  }
+  

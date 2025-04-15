@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HOWS - 전세사기 방지</title>
+  <link rel="stylesheet" href="../css/index.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="../js/index.js" defer></script>
+</head>
+<body class="home-page">
+
+  <!-- 헤더 -->
+  <header class="main-header">
+    <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo" /></a>
+    <div class="auth-top">
+      <a href="#" class="auth-link login-link">
+        <i class="fas fa-sign-in-alt"></i><span>Login</span>
+      </a>
+      <a href="#" class="auth-link join-link">
+        <i class="fas fa-user-plus"></i><span>Join</span>
+      </a>
+    </div>
+<!-- 로그인 상태 -->
+  <div class="auth-top-loggedin" style="display: none;">
+    <a href="./index.html" class="auth-link logout-link">
+      <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+    </a>
+    <a href="#" class="auth-link edit-link">
+      <i class="fas fa-user-edit"></i><span>Edit</span>
+    </a>
+  </div>
+
+   <!-- 로그인 모달 -->
+<div id="login-modal" class="modal">
+  <div class="modal-box">
+    <div class="modal-left">
+    <img src="../../assets/hows_logo.png" alt="Create Account 이미지" class="modal-image" />
+      <a href="#" id="go-to-join">Create New Account</a>
+    </div>
+    <div class="modal-right">
+      <form class="login-form" method="post" action="http://127.0.0.1:8000/login" onsubmit="return handleLogin(event)">
+        <h2>Sign In</h2>
+        <input type="text" name="id" placeholder="ID">
+        <input type="password" name="pw" placeholder="Password">
+        <input type="submit" value="Go →">
+      </form>
+    </div>
+    <span class="close">&times;</span>
+  </div>
+</div>
+
+<!-- 회원가입 모달 -->
+<div id="join_modal" class="modal">
+  <div class="modal-box-join">
+    <form class="join-form" method="post", action="http://127.0.0.1:8000/join" onsubmit="return handleJoinSubmit(event)">
+      <span class="close">&times;</span>
+      <h1>Join us!</h1>
+      <label for="name">이름</label>
+      <input type="text" name="name" placeholder="Name" required>
+      <label for="id">아이디</label>
+      <input type="text" name="id" placeholder="ID" required>
+      <label for="pw">비밀번호</label>
+      <input type="password" name="pw" placeholder="Password" required>
+      <label for="phone">전화번호</label>
+      <input type="text" name="phone" placeholder="Phone Number" required>
+      <label for="email">이메일</label>
+      <input type="text" name="email" placeholder="Email" required>
+
+      <button type="submit">Join</button>
+    </form>
+  </div>
+</div>
+
+
+    <nav class="nav-menu">
+      <a href="./index.html" class="active">Home</a>
+      <a href="#">Companies</a>
+      <a href="./map.html">Map</a>
+      <a href="./advices.html">Advices</a>
+      <a href="./trust.html">trust</a>
+    </nav>
+    <img src="../../assets/handshake-removebg.png" alt="악수 이미지" class="hero-img" />
+  </header>
+  <!-- 회원수정 모달 -->
+  <div id="edit_modal" class="modal">
+    <div class="modal-box-edit">
+      <form class="edit-form" method="post", action="http://127.0.0.1:8000/edit" onsubmit="return handleeditSubmit(event)">
+        <span class="close">&times;</span>
+        <h1>Edit</h1>
+        <label for="id">아이디</label>
+        <input type="text" name="id" placeholder="ID" required readonly>
+        <label for="pw">비밀번호</label>
+        <input type="password" name="pw" placeholder="Password" required>
+        <label for="phone">전화번호</label>
+        <input type="text" name="phone" placeholder="Phone Number" required>
+        <label for="email">이메일</label>
+        <input type="text" name="email" placeholder="Email" required>
+  
+        <button type="submit">done!</button>
+      </form>
+    </div>
+  </div>
+  <!-- 메인 콘텐츠 -->
+  <main>
+
+    <!-- 소개 영역 -->
+    <section class="hero-content">
+      <h1><span class="highlight">전세사기</span> 어떤 유형이 있을까?</h1>
+    </section>
+
+    <!-- 카드형 유형 소개 -->
+    <section class="card-section">
+      <div class="card-grid">
+        <div class="card">
+          <div class="icon-circle">🏚️</div>
+          <h3>깡통전세</h3>
+          
+          <button class="card-btn" onclick="openModal('modal-ggangtong')">자세히 보기</button>
+        </div>
+        <div class="card">
+          <div class="icon-circle">📉</div>
+          <h3>역전세</h3>
+          
+          <button class="card-btn" onclick="openModal('modal-down')">자세히 보기</button>
+        </div>
+        <div class="card">
+          <div class="icon-circle">📝</div>
+          <h3>이중계약</h3>
+          
+          <button class="card-btn" onclick="openModal('modal-double')">자세히 보기</button>
+        </div>
+        <div class="card">
+          <div class="icon-circle">💸</div>
+          <h3>갭투자형</h3>
+          
+          <button class="card-btn" onclick="openModal('modal-fake')">자세히 보기</button>
+        </div>
+        <div class="card">
+          <div class="icon-circle">🕵️‍♂️</div>
+          <h3>무자격 임대인</h3>
+          
+          <button class="card-btn" onclick="openModal('modal-no')">자세히 보기</button>
+        </div>
+        <div class="card">
+          <div class="icon-circle">⏳</div>
+          <h3>전입·확정일자 지연</h3>
+          
+          <button class="card-btn" onclick="openModal('modal-delay')">자세히 보기</button>
+        </div>
+      </div>
+    </section>
+      <div id="modal-ggangtong" style="display: none;" class="modal-scam" onclick="closeModal(event)">
+        <div class="modal-scam-content">
+          <div class="modal-icon-title">
+            <div class="icon">🏚️</div>
+            <h3>깡통전세란?</h3>
+          </div>
+          <p class="modal-subdesc highlight-box">
+          전세금이 매매가(집값)보다 같거나 높아서,<br />
+          집이 경매로 넘어가도 보증금을 돌려받기 어려운 상황입니다.
+        </p>
+        <h4>왜 위험할까?</h4>
+        <p>집값이 조금만 떨어져도 세입자 보증금 전액 손실 가능 하며 집주인이 도산하거나 잠적하면 회수가 불가능하게 됩니다</p>
+        <h4>사례</h4>
+        <p>2억짜리 신축 빌라에 1.9억 전세 → 집값 하락 후 경매 → 보증금 대부분 손해</p>        </p>
+        <h4>예방 방법</h4>
+        <ul><li>등기부등본 확인 (대출, 근저당 설정 여부)</li><li>매매가 대비 전세가 비율 체크 (80% 이상이면 주의!)</li><li>전세보증금 반환보증 가입</li></ul>
+        <button class="modal-close" onclick="closeModal(event)">닫기</button>
+      </div>
+    </div>
+      </div>
+      <div id="modal-down" style="display: none;" class="modal-scam" onclick="closeModal(event)">
+        <div class="modal-scam-content">
+          <div class="modal-icon-title">
+            <div class="icon">📉</div>
+            <h3>역전세란?</h3>
+          </div>
+          <p class="modal-subdesc highlight-box">
+            전세 시세가 떨어져 새 세입자를 구하지 못하거나, 낮은 가격에만 계약할 수 있게 되어</br>
+            보증금을 돌려주기 어려운 상황
+        </p>
+        <h4>왜 위험할까?</h4>
+        <p>집값 하락이나 공급 과잉으로 전세 수요가 줄면,
+        집주인이 기존 세입자의 전세금을 신규 계약으로 충당하지 못하게 되고 집주인의 유동성 부족은 보증금 미반환 사태를 발생시킵니다.</p>
+        <h4>사례</h4>
+        <ul><li>2년 전 2억 전세 계약 → 재계약 시 시세 1.5억</li>
+          <li>신규 세입자 구해도 기존 세입자에게 5천만 원 못 돌려줌</li>
+          <li>전세보증금 반환 소송 → 수년 걸림 </li> </ul>  
+        <h4>예방 방법</h4>
+        <ul><li>계약 시 전세가 하락 추세인지 확인</li><li>입주 전 최신 시세 조회 필수</li><li>필요 시 보증보험 가입 또는 보증금 일부 조정 협의
+        </li></ul>
+        <button class="modal-close" onclick="closeModal(event)">닫기</button>
+      </div>
+    </div>
+      </div>
+      <div id="modal-double" style="display: none;" class="modal-scam" onclick="closeModal(event)">
+        <div class="modal-scam-content">
+          <div class="modal-icon-title">
+            <div class="icon">📝</div>
+            <h3>이중계약이란?</h3>
+          </div>
+          <p class="modal-subdesc highlight-box">
+            하나의 부동산에 대해 복수의 임차인과 중복 계약을 맺거나,</br>
+            실제 소유자 또는 계약 조건을 속여 이중으로 계약을 진행하는 사기 수법입니다.
+        </p>
+        <h4>왜 위험할까?</h4>
+        <p> 같은 집을 여러 사람에게 전세 계약해 보증금을 중복으로 받아 챙기고,  
+          대항력 없는 세입자는 보증금을 전혀 돌려받지 못할 수 있습니다.</p>
+        <h4>사례</h4>
+        <ul>
+          <li>같은 날 2명에게 1층 빌라 전세 계약 체결</li>
+          <li>두 명 다 전입신고함 → 집주인 보증금 들고 잠적</li>
+          <li>한 명만 대항력 인정 → 나머지는 피해 발생</li>
+        </ul>
+        
+        <h4>예방 방법</h4>
+        <ul>
+          <li>등기부등본으로 실제 소유자 여부 확인</li>
+          <li>계약 즉시 전입신고 + 확정일자 받기</li>
+          <li>공인중개사 여부 확인 (무자격 중개 주의)</li>
+        </ul>
+        <button class="modal-close" onclick="closeModal(event)">닫기</button>
+      </div>
+    </div>
+      </div>
+      <div id="modal-fake" style="display: none;" class="modal-scam" onclick="closeModal(event)">
+        <div class="modal-scam-content">
+          <div class="modal-icon-title">
+            <div class="icon">💸</div>
+            <h3>갭투자형 사기란?</h3>
+          </div>
+          <p class="modal-subdesc highlight-box">
+            세입자의 전세금으로 집을 사들이고,  
+            이후 보증금을 돌려주지 못한 채 잠적하거나 파산하는 전세사기 유형입니다.
+          </p>
+        <h4>왜 위험할까?</h4>
+        <p>
+          전세가가 매매가에 육박하거나 초과하는 구조에서 시세가 하락하면 보증금 회수가 거의 불가능해집니다. </p>
+        <h4>사례</h4>
+        <ul>
+          <li>2억짜리 신축 빌라에 전세 1.9억 → 실투자 거의 없음</li>
+          <li>집값 하락 + 연락두절 → 경매</li>
+          <li>보증금 절반도 못 돌려받음</li>
+        </ul>
+        
+        <h4>예방 방법</h4>
+        <ul>
+          <li>전세가율 80% 이상이면 의심</li>
+          <li>다수 매물 보유한 임대인 경계</li>
+          <li>전세보증금 반환 보증 가입</li>
+        </ul>
+        
+        <button class="modal-close" onclick="closeModal(event)">닫기</button>
+      </div>
+    </div>
+      </div>
+      <div id="modal-no" style="display: none;" class="modal-scam" onclick="closeModal(event)">
+        <div class="modal-scam-content">
+          <div class="modal-icon-title">
+            <div class="icon">🕵️‍♂️</div>
+            <h3>무자격 임대인이란?</h3>
+          </div>
+          <p class="modal-subdesc highlight-box">
+            소유자가 아님에도 위조된 서류나 신분을 통해  
+            임차인과 불법으로 계약을 맺고 전세금을 편취하는 전세사기 유형입니다.
+          </p>
+          
+        <h4>왜 위험할까?</h4>
+        <p>
+          계약 상대방이 실제 소유자가 아니면 계약 자체가 무효가 되고,  
+          대항력이나 우선변제권도 가질 수 없어 보증금을 돌려받기 매우 어렵습니다.
+        </p>
+        <h4>사례</h4>
+        <ul>
+          <li>가짜 위임장으로 대리인 사칭</li>
+          <li>집주인인 줄 알고 계약했으나 소유자와 무관</li>
+          <li>보증금 반환 불가 판결</li>
+        </ul>
+
+        <h4>예방 방법</h4>
+        <ul>
+          <li>등기부등본으로 소유자 확인</li>
+          <li>위임 계약 시 공증된 위임장 필수</li>
+          <li>공인중개사 자격증 & 사무소 등록번호 확인</li>
+        </ul>
+        
+        <button class="modal-close" onclick="closeModal(event)">닫기</button>
+      </div>
+    </div>
+      </div>
+      <div id="modal-delay" style="display: none;" class="modal-scam" onclick="closeModal(event)">
+        <div class="modal-scam-content">
+          <div class="modal-icon-title">
+            <div class="icon">⏳</div>
+            <h3>전입·확정일자 지연이란?</h3>
+          </div>
+          <p class="modal-subdesc highlight-box">
+            전입신고나 확정일자를 고의로 지연시켜  
+            세입자의 대항력·우선변제권을 무력화시키는 전세사기 유형입니다.
+          </p>
+          
+        <h4>왜 위험할까?</h4>
+        <p>
+          대항력과 우선변제권은 전입신고와 확정일자를 기준으로 결정되기 때문에,  
+          이를 놓치면 보증금 반환이 불가능해질 수 있습니다.
+        </p>
+        <h4>사례</h4>
+        <ul>
+          <li>계약 후 “며칠 뒤 전입하라”는 유도</li>
+          <li>그 사이 근저당 설정 + 이중계약 발생</li>
+          <li>세입자 A는 순위 밀려 보증금 못 돌려받음</li>
+        </ul>
+        
+        <h4>예방 방법</h4>
+        <ul>
+          <li>계약 후 즉시 전입신고 + 확정일자 받기</li>
+          <li>지연 요구 시 계약 중단 고려</li>
+          <li>등기부등본 최신본 확인</li>
+        </ul>
+        
+        <button class="modal-close" onclick="closeModal(event)">닫기</button>
+      </div>
+    </div>
+      </div>
+      
+    <!-- 기능 슬라이드 -->
+    <section class="about-hows-slider">
+      <h2><span class="highlight">HOWS</span>가 하는 일</h2>
+      <div class="slider-container">
+        <button class="nav-btn prev">←</button>
+        <div class="about-slide active">
+          <h3>실시간 매물 분석</h3>
+          <p>네이버 부동산 기반 매물을 분석하여 위험도를 시각화합니다.</p>
+        </div>
+        <div class="about-slide">
+          <h3>임대인 신뢰도 검사</h3>
+          <p>등기부등본 기반 계약자의 신뢰도를 자동 분석합니다.</p>
+        </div>
+        <div class="about-slide">
+          <h3>전세사기 시뮬레이션 </h3>
+          <p>가상의 계약 상황을 바탕으로 사기 위험 요소를 사전 점검합니다. </p>
+        </div>
+        <button class="nav-btn next">→</button>
+      </div>
+    </section>
+
+    <!-- CTA 배너 -->
+    <section class="cta-banner">
+      <div class="cta-inner">
+        <div class="cta-text">
+          <h2>전세사기 위험으로부터<br /><strong>당신을</strong> 보호합니다!</h2>
+          <p>We keep your money safe.</p>
+        </div>
+        <div class="cta-image">
+          <img src="../../assets/hi.png" alt="아래사진" />
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <img src="../../assets/hows_logo.png" alt="HOWS 로고" />
+      </div>
+      <div class="footer-columns">
+        <div>
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#">Apps</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Services</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Our guides</a></li>
+            <li><a href="#">FA</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <ul>
+            <li><a href="#">About</a></li>
+          </ul>
+        </div>
+        <div class="footer-newsletter">
+          <h4>Subscribe to newsletter</h4>
+          <p>For product announcements and exclusive insights</p>
+          <form>
+            <input type="email" placeholder="Your email address" />
+            <button type="submit">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+</body>
+</html>
