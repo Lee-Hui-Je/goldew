@@ -1,8 +1,9 @@
 import os
-from dotenv import load_dotenv
 import openai
+from dotenv import load_dotenv
 from pathlib import Path
-from fastapi import FastAPI, Form,HTTPException,Depends,Request
+from fastapi import FastAPI, Form,HTTPException,Depends,Request,UploadFile,File,Form
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from controller import pgsql_test
 from fastapi.responses import FileResponse
@@ -15,6 +16,8 @@ from openai import OpenAI
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from fastapi.responses import StreamingResponse
+from .pdf_parser import extract_text_from_pdf
+from .risk import analyze_register_with_user_input, generate_summary_and_actions
 app = FastAPI()
 
 @app.get("/")
@@ -95,6 +98,48 @@ async def edit(
     else:
         raise HTTPException(status_code=500, detail="수정 실패")
 
+@app.post("/trust-check")
+async def trust_check(
+    landlord: str = Form(...),
+    contract_date: str = Form(...),
+    address: str = Form(...),
+    deposit: str = Form(...),
+    file1: UploadFile = File(...)
+):
+    # 1. PDF 텍스트 추출
+    text = extract_text_from_pdf(file1)
+
+    # 2. 분석
+    
+    deductions, warnings = analyze_register_with_user_input(text, landlord, contract_date, deposit)
+    
+
+    
+    summary, actions, warnings = generate_summary_and_actions(deductions, warnings)
+    
+    total_deduction = sum(d["point"] for d in deductions)
+    score = max(100 + total_deduction, 0)
+    grade = "A등급" if score >= 90 else "B등급" if score >= 75 else "C등급" if score >= 60 else "D등급" if score >= 40 else "E등급"
+    risk = "안전" if score >= 90 else "주의" if score >= 60 else "위험"
+
+    # 5. 결과 반환
+    result = {
+        "input": {
+            "landlord": landlord or "입력되지 않음",
+            "date": contract_date or "입력되지 않음",
+            "address": address or "입력되지 않음",
+            "deposit": deposit or "입력되지 않음"
+        },
+        "score": score,
+        "grade": grade,
+        "risk": risk,
+        "deductions": deductions,
+        "summary": summary,  
+        "actions": actions,   
+        "warnings": warnings 
+    }
+
+    return JSONResponse(content=result)
 
 load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
 openai.api_key = os.getenv("OPENAI_API_KEY")
@@ -148,11 +193,4 @@ async def chat(request: Request, ty: ChatInput):
         - "좋습니다!"라는 문장 대신 "시뮬레이션을 시작할게요! 🏠"로 시작 """
         }] + history
 
-    async def token_stream():
-        async for chunk in chat_llm.astream(messages):
-            if chunk.content:
-                yield chunk.content
-        # 응답 완료 후 AI 응답을 히스토리에 저장 (전체 content는 따로 누적하거나 reconstruct 해야 함)
-        history.append(chunk)
-
-    return StreamingResponse(token_stream(), media_type="text/plain")
+   

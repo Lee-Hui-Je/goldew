@@ -11,16 +11,15 @@
 </head>
 
     <body>
-        <header class="main-header">
-          <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo" /></a>
-          <nav class="nav-menu">
-            <a href="./index.html">Home</a>
-            <a href="#">Companies</a>
-            <a href="./map.html">Map</a>
-            <a href="./advices.html">Advices</a>
-            <a href="./trust.html" class="active">trust</a>
-          </nav>
-        </header>
+      <header class="main-header">
+        <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo" /></a>
+        <nav class="nav-menu">
+          <a href="./index.html">Home</a>
+          <a href="./map.html">Map</a>
+          <a href="./trust.html" class="active">Trust</a>
+          <a href="./advices.html">Advices</a>
+        </nav>
+      </header>
         
   <main class="trust-page">
     <h1>임대인 신뢰 검사</h1>
@@ -88,15 +87,61 @@
       <button id="start-check-btn">분석하기</button>
     </section>
     
-    <!-- 아래쪽: 리포트 영역 -->
-    <section class="trust-report">
-      <h3>신뢰도 리포트</h3>
-      <div class="report-row">
-        <span>위험도: ⭐⭐⭐⭐☆</span>
-        <button>리포트 보기</button>
-      </div>
-      
-    </section>
+<!-- 아래쪽: 리포트 영역 -->
+<!--  로딩 스피너 -->
+<div id="loading-spinner" style="display: none; text-align: center; margin: 30px 0;">
+  <div class="spinner"></div>
+  <p style="margin-top: 10px; font-size: 0.95rem; color: #555;">분석 중입니다...</p>
+</div>
+
+<!-- 리포트 본문 -->
+<section class="trust-report" style="display: none;">
+  <h2>임대인 신뢰도 분석 리포트</h2>
+
+  
+  <div class="report-section">
+    <h3>입력 정보 요약</h3>
+    <p><strong>임대인:</strong> <span id="input-landlord">-</span></p>
+    <p><strong>계약일:</strong> <span id="input-date">-</span></p>
+    <p><strong>주소:</strong> <span id="input-address">-</span></p>
+    <p><strong>보증금:</strong> <span id="input-deposit">-</span></p>
+  </div>
+
+  
+  <div class="report-section">
+    <h3>종합 점수</h3>
+    <p>
+      <strong><span id="score">--</span>점</strong> /
+      <strong><span id="grade">--</span></strong> /
+      <span class="risk-label" id="risk-label">--</span>
+    </p>
+  </div>
+
+ 
+  <div class="report-section" id="deduction-section">
+    <h3>위험 요인</h3>
+    <div id="deduction-list"></div>
+  </div>
+
+  
+  <div class="report-section">
+    <h3>분석 요약</h3>
+    <pre id="summary-text" style="white-space: pre-wrap;">-</pre>
+  </div>
+  
+
+  <div class="report-section">
+    <h3>추천 조치</h3>
+    <div id="action-list"></div>
+  </div>
+
+  <div class="report-source">
+    <p><small>※ 분석 근거: 등기부등본, 계약서, 입력된 계약 정보 기반</small></p>
+  </div>
+</section>
+
+
+
   </main>
 
 

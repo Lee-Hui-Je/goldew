@@ -10,7 +10,7 @@ let chat_bool = false;
 ro_btn.addEventListener("click", () => {
   text_box.style.opacity = "0";
   ro_btn.style.opacity = "0";
-  robot.style.backgroundImage = "url(../../assets/c_robot2.gif)";
+  robot.style.backgroundImage = "url(../../assets/22.gif)";
 
   setTimeout(() => {
     text_box.style.visibility = "hidden";
@@ -39,13 +39,13 @@ document.querySelectorAll('.gpt-start').forEach(menu => {
     type = menu.getAttribute('data-type');
     selectedType = type;
     messageHistory = [];
-
+    robot.style.backgroundImage = "url(../../assets/10.png)";
     
     document.querySelectorAll('.robotbox li').forEach(li => {
       li.style.visibility = 'hidden';
       li.style.opacity = '0';
     });
-    document.querySelector('.robot').style.transform = 'translate(-90%, 0)';
+    document.querySelector('.robot').style.transform = 'translate(-70%, 0)';
 
     setTimeout(() => {
       document.getElementById('overlay').classList.add('active');
@@ -76,6 +76,8 @@ document.getElementById("close-chat-btn").addEventListener("click", () => {
   modal.classList.add('hide');
   overlay.classList.add('hide');
 
+  robot.style.backgroundImage = "url(../../assets/22.gif)";
+
   setTimeout(() => {
     modal.classList.remove('show', 'hide');
     overlay.classList.remove('active', 'hide');
@@ -83,7 +85,7 @@ document.getElementById("close-chat-btn").addEventListener("click", () => {
 
   setTimeout(()=>{
     document.querySelector('.robot').style.transform = 'translate(0, 0)';
-  },500)
+  },100)
   setTimeout(()=>{
     document.querySelectorAll('.robotbox li').forEach(li => {
       li.style.visibility = 'visible';
@@ -122,7 +124,7 @@ async function fetchGPT() {
   try {
     const lastUserMessage = messageHistory[messageHistory.length - 1]?.content || "";
 
-    const res = await fetch('http://localhost:8000/chat', {
+    const res = await fetch('http://34.132.18.41:8000/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input: lastUserMessage, type:type ,chat_bool:chat_bool})

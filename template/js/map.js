@@ -17,45 +17,51 @@ window.onload = function() {
 
 const map = new naver.maps.Map('map', {
     center: new naver.maps.LatLng(35.1595, 126.8526),
-    zoom: 15
+    zoom: 12
 });
 
+const bounds = new naver.maps.LatLngBounds();
 const markerData = [
     {
     address: "서울특별시 중구 세종대로 110",
     price: "15억 / 3억",
-    level: "★★★★★",
-    label: "최고",
+    level: 98,
     danger: "high",
+    area: "29.86m²",
+    move: "입주 가능",
     date: "2024.04.04"
     },
     {
     address: "광주 광산구 신가삼효로 22-12",
     price: "5억 / 2.5억",
-    level: "★★★☆☆",
-    label: "중간",
+    level: 64,
     danger: "medium",
+    area: "29.86m²",
+    move: "입주 가능",
     date: "2024.03.11"
     },
     {
     address: "광주 서구 상무대로 1175",
     price: "8억 / 2.5억",
-    level: "★★★★☆",
-    label: "높음",
+    level: 86,
     danger: "high",
+    area: "29.86m²",
+    move: "입주 가능",
     date: "2024.03.12"
     },
     {
     address: "광주 서구 쌍촌동 948-33, 1동",
     price: "8억 / 2.5억",
-    level: "★★★★☆",
-    label: "높음",
+    level: 89,
     danger: "high",
+    area: "29.86m²",
+    move: "입주 가능",
     date: "2024.03.12"
     }
 ];
 
-const bounds = new naver.maps.LatLngBounds();
+
+let remaining = markerData.length;
 
 markerData.forEach((data) => {
     naver.maps.Service.geocode(
@@ -65,10 +71,9 @@ markerData.forEach((data) => {
                 console.error("주소 변환 실패:", data.address);
                 return;
             }
-
+        
             const result = response.v2.addresses[0];
-            console.log("지오코딩 결과:", result);
-
+        
             if (!result) {
                 console.error("주소 좌표가 없습니다:", data.address);
                 return;
@@ -81,7 +86,7 @@ markerData.forEach((data) => {
                 position: latlng,
                 map: null,
                 icon: {
-                    content: `<div class="marker ${data.danger}">⚠️</div>`,
+                    content: `<div class="marker ${data.danger}"></div>`,
                     size: new naver.maps.Size(30, 30),
                     anchor: new naver.maps.Point(15, 15)
                 }
@@ -93,20 +98,91 @@ markerData.forEach((data) => {
                 marker.setMap(map);
             }
 
+            const canvasId = `donutChart-${Math.random().toString(36).substr(2, 9)}`;
+
             const infoWindow = new naver.maps.InfoWindow({
                 content: `
                     <div class="map-info-window">
-                    <strong>${data.address}</strong><br/>
-                    매매가 / 전세가: ${data.price}<br/>
-                    위험도: ${data.level} (${data.label})<br/>
-                    등록일: ${data.date}
+                        <div class = "map-top">
+                            <canvas id="${canvasId}" width="100" height="50"></canvas>
+                            <div class="price">
+                                <p>전세가: ${data.price}</p>
+                                <p>추정가: ${data.price}</p>
+                            </div>
+                        </div>
+                        <div class="map-bottom">
+                            <div>${data.address}</div>
+                            <div class ="area">
+                                <p>${data.area}</p>
+                                <p>${data.move}</p>
+                            </div>
+                        </div>
                     </div>
-                `
+                `,
+                backgroundColor: "transparent",
+                borderWidth: 0
             });
 
             naver.maps.Event.addListener(marker, "mouseover", function () {
                 infoWindow.open(map, marker);
-            });
+              
+                // infoWindow가 DOM에 렌더된 다음 실행
+                setTimeout(() => {
+                  const canvas = document.getElementById(canvasId);
+                  if (!canvas) return;
+                  
+                  const ctx = canvas.getContext('2d');
+                  const gradient = ctx.createLinearGradient(0, 0, 300, 0); // 가로 방향
+                  gradient.addColorStop(0, 'red');
+                  gradient.addColorStop(0.1, 'orange');
+                  gradient.addColorStop(0.2, 'yellow');
+                  gradient.addColorStop(0.5, 'green');
+              
+                  new Chart(canvas, {
+                    type: 'doughnut',
+                    data: {
+                      labels: ['위험도', '나머지'],
+                      datasets: [{
+                        data: [data.level, 100 - data.level],
+                        backgroundColor: [gradient, 'lightgray']
+                      }]
+                    },
+                    options: {
+                      responsive: false,
+                      cutout: '90%',
+                      rotation: -90,         // 시작 각도 (위쪽부터 시작)
+                      circumference: 180,    // 그릴 범위 (180도 → 반원)
+                      plugins: {
+                        legend: { display: false },
+                        tooltip: { enabled: false }
+                      }
+                    },
+                    plugins: [{
+                        id: 'centerText',
+                        beforeDraw: function(chart) {
+                          const { width, height, ctx } = chart;
+                          ctx.restore();
+
+                          // 그림자 설정
+                          ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+                          ctx.shadowBlur = 4;
+                          ctx.shadowOffsetX = 2;
+                          ctx.shadowOffsetY = 2;
+
+                          ctx.font = 'bold 14px sans-serif';
+                          ctx.fillStyle = '#333';
+                          ctx.textBaseline = 'middle';
+                          const text = `${data.level}%`;
+                          const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                          const textY = height / 1.4;
+                          ctx.fillText(text, textX, textY);
+                          
+                          ctx.save();
+                        }
+                      }]
+                  });
+                }, 10); // DOM 붙는 시간 약간 기다리기
+              });
             naver.maps.Event.addListener(marker, "mouseout", function () {
                 infoWindow.close();
             });
@@ -116,7 +192,11 @@ markerData.forEach((data) => {
                 console.log(marker)
             });
 
-            map.fitBounds(bounds); // 모든 마커 보이도록 지도 자동 조정
+             remaining--;
+             if (remaining === 0) {
+             map.setCenter(new naver.maps.LatLng(35.1595, 126.8526));
+             map.setZoom(12);
+             }
         }
     );
 });
@@ -181,4 +261,6 @@ window.addEventListener("DOMContentLoaded", () => {
     );
   }
   
+//   chart.js
+
   

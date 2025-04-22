@@ -75,7 +75,7 @@ async function handleJoinSubmit(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/join", {
+    const res = await fetch("http://34.132.18.41:8000/join", {
       method: "POST",
       body: formData,
     });
@@ -107,7 +107,7 @@ window.handleLogin = async function(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/login", {
+    const res = await fetch("http://34.132.18.41:8000/login", {
       method: "POST",
       body: formData
     });
@@ -169,7 +169,7 @@ async function handleeditSubmit(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://127.0.0.1:8000/edit", {
+    const res = await fetch("http://34.132.18.41:8000/edit", {
       method: "POST",
       body: formData,
     });
@@ -195,7 +195,7 @@ document.querySelector(".edit-link").addEventListener("click", (e) => {
   document.getElementById("edit_modal").style.display = "block";
 });
 
-// edit 모달 닫기 버튼
+
 const editModal = document.getElementById("edit_modal");
 const editCloseBtn = editModal.querySelector(".close");
 
@@ -204,3 +204,76 @@ editCloseBtn.addEventListener("click", () => {
 });
 
 
+// 팀원 모달
+  document.querySelector('a[href="#team"]').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('teamModal').style.display = 'block';
+  });
+
+  document.querySelector('.Tclose-btn').addEventListener('click', function() {
+    document.getElementById('teamModal').style.display = 'none';
+  });
+
+
+
+// 스크롤
+function scrollToSection(id) {
+  const target = document.getElementById(id);
+  const offset = -90;
+  const y = target.getBoundingClientRect().top + window.pageYOffset + offset;
+  window.scrollTo({ top: y, behavior: "smooth" });
+}
+
+// Guide 
+document.getElementById("guide-link").addEventListener("click", function(e) {
+  e.preventDefault();
+  scrollToSection("guide");
+});
+
+// Tips 메뉴
+document.getElementById("tips-link").addEventListener("click", function(e) {
+  e.preventDefault();
+  scrollToSection("tips");
+});
+
+
+document.getElementById("faq-link").addEventListener("click", function (e) {
+  e.preventDefault();
+  document.getElementById("faqModal").style.display = "block";
+});
+
+document.querySelector(".Fclose-btn").addEventListener("click", function () {
+  document.getElementById("faqModal").style.display = "none";
+});
+
+document.getElementById("faqModal").addEventListener("click", function (e) {
+  if (e.target.id === "faqModal") {
+    e.target.style.display = "none";
+  }
+});
+
+
+//  FAQ 아코디언
+document.querySelectorAll(".accordion-header").forEach((header) => {
+  header.addEventListener("click", () => {
+    const active = document.querySelector(".accordion-header.active");
+    if (active && active !== header) {
+      active.classList.remove("active");
+      active.nextElementSibling.classList.remove("active");
+    }
+    header.classList.toggle("active");
+    header.nextElementSibling.classList.toggle("active");
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const contactLink = document.querySelector(".open-contact-modal");
+  if (contactLink) {
+    contactLink.addEventListener("click", (e) => {
+      e.preventDefault();  
+      const modal = document.getElementById("contactModal");
+      if (modal) modal.style.display = "block";
+    });
+  }
+});

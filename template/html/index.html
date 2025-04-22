@@ -40,7 +40,7 @@
       <a href="#" id="go-to-join">Create New Account</a>
     </div>
     <div class="modal-right">
-      <form class="login-form" method="post" action="http://127.0.0.1:8000/login" onsubmit="return handleLogin(event)">
+      <form class="login-form" method="post" action="http://34.132.18.41:8000/login" onsubmit="return handleLogin(event)">
         <h2>Sign In</h2>
         <input type="text" name="id" placeholder="ID">
         <input type="password" name="pw" placeholder="Password">
@@ -54,7 +54,7 @@
 <!-- 회원가입 모달 -->
 <div id="join_modal" class="modal">
   <div class="modal-box-join">
-    <form class="join-form" method="post", action="http://127.0.0.1:8000/join" onsubmit="return handleJoinSubmit(event)">
+    <form class="join-form" method="post", action="http://34.132.18.41:8000/join" onsubmit="return handleJoinSubmit(event)">
       <span class="close">&times;</span>
       <h1>Join us!</h1>
       <label for="name">이름</label>
@@ -76,17 +76,16 @@
 
     <nav class="nav-menu">
       <a href="./index.html" class="active">Home</a>
-      <a href="#">Companies</a>
       <a href="./map.html">Map</a>
+      <a href="./trust.html">Trust</a>
       <a href="./advices.html">Advices</a>
-      <a href="./trust.html">trust</a>
     </nav>
     <img src="../../assets/handshake-removebg.png" alt="악수 이미지" class="hero-img" />
   </header>
   <!-- 회원수정 모달 -->
   <div id="edit_modal" class="modal">
     <div class="modal-box-edit">
-      <form class="edit-form" method="post", action="http://127.0.0.1:8000/edit" onsubmit="return handleeditSubmit(event)">
+      <form class="edit-form" method="post", action="http://34.132.18.41:8000/edit" onsubmit="return handleeditSubmit(event)">
         <span class="close">&times;</span>
         <h1>Edit</h1>
         <label for="id">아이디</label>
@@ -111,7 +110,7 @@
     </section>
 
     <!-- 카드형 유형 소개 -->
-    <section class="card-section">
+    <section id="tips" class="card-section">
       <div class="card-grid">
         <div class="card">
           <div class="icon-circle">🏚️</div>
@@ -326,7 +325,7 @@
       </div>
       
     <!-- 기능 슬라이드 -->
-    <section class="about-hows-slider">
+    <section id = "guide" class="about-hows-slider">
       <h2><span class="highlight">HOWS</span>가 하는 일</h2>
       <div class="slider-container">
         <button class="nav-btn prev">←</button>
@@ -369,39 +368,139 @@
       </div>
       <div class="footer-columns">
         <div>
-          <h4>Product</h4>
+          <h4>Service</h4>
           <ul>
-            <li><a href="#">Apps</a></li>
-            <li><a href="#">Contact</a></li>
-            <li><a href="#">Services</a></li>
+            <li><a href="map.html">Map</a></li>
+            <li><a href="trust.html">Trust</a></li>
+            <li><a href="advices.html">Simulation</a></li>
           </ul>
         </div>
         <div>
-          <h4>Resources</h4>
+          <h4>Support</h4>
           <ul>
-            <li><a href="#">Blog</a></li>
-            <li><a href="#">Our guides</a></li>
-            <li><a href="#">FA</a></li>
+            <li><a href="#" id="faq-link">FAQ</a></li>
+            <li><a href="#" id="guide-link">Guide</a></li>
+            <li><a href="#" id ="tips-link">Tips</a></li>
           </ul>
         </div>
         <div>
-          <h4>Company</h4>
+          <h4>About</h4>
           <ul>
-            <li><a href="#">About</a></li>
+            <li><a href="#">Intro</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#" class="open-contact-modal">contact</a></li>
+
           </ul>
         </div>
         <div class="footer-newsletter">
-          <h4>Subscribe to newsletter</h4>
-          <p>For product announcements and exclusive insights</p>
+          <h4>Updates</h4>
+          <p>Get tips and service updates</p>
           <form>
             <input type="email" placeholder="Your email address" />
-            <button type="submit">Subscribe</button>
+            <button type="submit">Submit</button>
           </form>
         </div>
       </div>
     </div>
   </footer>
+  <!-- Contact Modal -->
+<div id="contactModal" class="contact-modal">
+  <div class="contact-modal-box">
+    <span class="contact-close-btn" onclick="document.getElementById('contactModal').style.display='none'">&times;</span>
+    <h1> CONTACT US!</h1>
+    <ul class="contact-list">
+      <li>
+        <h2>협업 제안하기</h2>
+    <p>HOWS는 전세사기 예방을 위한 다양한 협력 기회를 열어두고 있습니다.</p>
+    <ul>
+      <li> 공공기관 · 지자체 연계</li>
+      <li> 법률 · 부동산 스타트업 협업</li>
+      <li> 연구기관 · 학술 프로젝트</li>
+    </ul>
+    <p style="margin-top: 10px;">제안은 아래 메일로 보내주세요!</p>
+    <p><strong>📧goldew@gmail.com</strong></p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+  <!-- Team Modal -->
+<div id="teamModal" class="Tmodal">
+  <div class="Tmodal-content">
+    <span class="Tclose-btn">&times;</span>
+    <h2>황금이슬</h2>
+    <div class="team-container">
+      <div class="team-card">
+        <img src="../../assets/mem1.png" alt="차황현">
+        <h3>차황현</h3>
+        <p>Frontend Developer</p>
+      </div>
+      <div class="team-card">
+        <img src="../../assets/mem4.png" alt="남다슬">
+        <h3>남다슬</h3>
+        <p>Frontend Developer</p>
+      </div>
+      <div class="team-card">
+        <img src="../../assets/mem3.png" alt="김주석">
+        <h3>김주석</h3>
+        <p>Backend Developer</p>
+      </div>
+      <div class="team-card">
+        <img src="../../assets/mem2.png" alt="이희제">
+        <h3>이희제</h3>
+        <p>Backend Developer</p>
+      </div>
+   
+    </div>
+  </div>
+</div>
+<div id="faqModal" class="Fmodal" style="display: none;" >
+  <div class="Fmodal-content" >
+    <span class="Fclose-btn">&times;</span>
+    <section class="faq-section">
+      <h2>FAQ</h2>
+
+  <div class="accordion">
+    <div class="accordion-item">
+      <button class="accordion-header">1. 계약 전에 꼭 확인해야 하는 건 뭐가 있나요?</button>
+      <div class="accordion-body">
+        전세 계약 전 등기부등본, 근저당 여부, 전세가율 등을 반드시 확인해야 안전한 거래를 할 수 있습니다.
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-header">2. 임대인 신뢰도는 어떻게 분석되나요?</button>
+      <div class="accordion-body">
+        등기부등본, 근저당, 채무 이력, 소유권 변동 등을 자동 분석하여 임대인의 신뢰 점수를 제공합니다.
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-header">3. 지도에 표시되는 위험도 기준은 무엇인가요?</button>
+      <div class="accordion-body">
+        전세가율, 지역 통계, 근저당 설정 여부 등 다양한 지표를 종합 분석하여 매물의 위험도를 시각화합니다.
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-header">4. 시뮬레이션은 왜 필요한가요?</button>
+      <div class="accordion-body">
+        전세사기는 계약 전에는 티가 나지 않는 경우가 많습니다. 시뮬레이션을 통해 사기 유형을 체험하고, 어떤 질문과 상황에서 주의해야 하는지 미리 익히는 것이 피해를 예방하는 가장 효과적인 방법 중 하나입니다.
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-header">5. HOWS는 무료인가요?</button>
+      <div class="accordion-body">
+        기본 기능은 모두 무료로 제공되며, 일부 고급 기능은 추후 유료로 전환될 수 있습니다.
+      </div>
+    </div>
+  </div>
+</section>
+</div>
 
 
+
+  
 </body>
 </html>
