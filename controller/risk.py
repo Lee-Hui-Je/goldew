@@ -2,7 +2,25 @@ import re
 from datetime import datetime, timedelta
 
 
-def analyze_register_with_user_input(text, landlord_input, contract_date_input, deposit_str):
+def extract_address_from_text(text):
+    match = re.search(r"\[(집합건물|건물)\]\s*(광주광역시[^\n]+)", text)
+    if match:
+        return match.group(2).strip()
+
+    match = re.search(r"\[도로명주소\]\s*(광주광역시[^\n]+)", text)
+    if match:
+        return match.group(1).strip()
+
+    return None
+
+
+def normalize_address(addr):
+    addr = re.sub(r"\s+", "", addr).lower()
+    addr = re.sub(r"광주광역시", "", addr)
+    return addr
+
+
+def analyze_register_with_user_input(text, landlord_input, contract_date_input, deposit_str, address_input):
     deductions = []
     deduction_reasons = set()
     warnings = []
@@ -12,9 +30,17 @@ def analyze_register_with_user_input(text, landlord_input, contract_date_input, 
         deposit = int(re.sub(r"[^\d]", "", deposit_str)) if deposit_str else None
         if deposit is None:
             warnings.append("· 보증금 → 근저당권 분석 제외됨")
+            reason = "보증금 미입력으로 근저당권 비교 불가 (미확인)"
+            if reason not in deduction_reasons:
+                deductions.append({"reason": reason, "point": -5})
+                deduction_reasons.add(reason)
     except:
         deposit = None
         warnings.append("· 보증금 → 근저당권 분석 제외됨")
+        reason = "보증금 미입력으로 근저당권 비교 불가 (미확인)"
+        if reason not in deduction_reasons:
+            deductions.append({"reason": reason, "point": -5})
+            deduction_reasons.add(reason)
 
     # 근저당권 감지
     mortgage_matches = re.findall(r"채권최고액[\s:()]*금?\s*([\d,]+)\s*원", text)
@@ -30,7 +56,7 @@ def analyze_register_with_user_input(text, landlord_input, contract_date_input, 
                     point = -5
                     reason = "근저당권 설정 존재 (보증금 미초과)"
             else:
-                reason = "근저당권 존재 (보증금 미입력으로 초과 여부 판단 불가)"
+                reason = "근저당권 존재 (보증금 미입력으로 초과 여부 판단 불가) (미확인)"
                 point = -5
             if reason not in deduction_reasons:
                 deductions.append({"reason": reason, "point": point})
@@ -76,11 +102,19 @@ def analyze_register_with_user_input(text, landlord_input, contract_date_input, 
                 except:
                     continue
         except:
-            warnings.append("· 계약일 → 선순위 권리 감지 제외됨")
+            reason = "계약일 형식 오류로 비교 불가 (미확인)"
+            if reason not in deduction_reasons:
+                deductions.append({"reason": reason, "point": -10})
+                deduction_reasons.add(reason)
+            warnings.append("· 계약일 → 형식 오류로 선순위 권리 감지 제외됨")
     else:
+        reason = "계약일 미입력으로 비교 불가 (미확인)"
+        if reason not in deduction_reasons:
+            deductions.append({"reason": reason, "point": -5})
+            deduction_reasons.add(reason)
         warnings.append("· 계약일 → 선순위 권리 감지 제외됨")
 
-    # 임대인 불일치
+    # 임대인 비교
     if landlord_input:
         if landlord_input not in text:
             reason = "입력한 임대인이 등기부 상 소유자와 불일치"
@@ -88,7 +122,34 @@ def analyze_register_with_user_input(text, landlord_input, contract_date_input, 
                 deductions.append({"reason": reason, "point": -20})
                 deduction_reasons.add(reason)
     else:
+        reason = "임대인 정보 미입력으로 비교 불가 (미확인)"
+        if reason not in deduction_reasons:
+            deductions.append({"reason": reason, "point": -5})
+            deduction_reasons.add(reason)
         warnings.append("· 임대인 → 실소유자 불일치 확인 제외됨")
+
+    # 주소 비교
+    register_addr = extract_address_from_text(text)
+    if address_input:
+        norm_user = normalize_address(address_input)
+        norm_reg = normalize_address(register_addr) if register_addr else None
+
+        if register_addr:
+            if norm_user not in norm_reg:
+                reason = "입력한 주소와 등기부 소재지가 일치하지 않음"
+                if reason not in deduction_reasons:
+                    deductions.append({"reason": reason, "point": -20})
+                    deduction_reasons.add(reason)
+        else:
+            reason = "등기부에서 주소(소재지)를 추출할 수 없음 (미확인)"
+            if reason not in deduction_reasons:
+                deductions.append({"reason": reason, "point": -10})
+                deduction_reasons.add(reason)
+    else:
+        reason = "주소 미입력으로 비교 불가 (미확인)"
+        if reason not in deduction_reasons:
+            deductions.append({"reason": reason, "point": -10})
+            deduction_reasons.add(reason)
 
     # 신탁
     if "신탁" in text:
@@ -119,7 +180,6 @@ def analyze_register_with_user_input(text, landlord_input, contract_date_input, 
             deduction_reasons.add(reason)
 
     return deductions, warnings
-
 
 def generate_summary_and_actions(deductions, warnings):
     summary_parts = set()

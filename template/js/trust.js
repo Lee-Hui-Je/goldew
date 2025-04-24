@@ -18,11 +18,13 @@ document.querySelectorAll(".clear-btn").forEach((btn) => {
 });
 
 function getRiskLabel(score) {
+  if (score === "na") return "미확인";
   const abs = Math.abs(score);
   if (abs > 20) return "위험";
   if (abs > 0) return "주의";
   return "안전";
 }
+
 // 3. 총점 도넛 차트
 //--------------------------------------------------
 function renderTotalScoreChart(score, riskLabel) {
@@ -87,14 +89,9 @@ const descMap = {
   lease: "임차권 등기는 선순위 임차인 가능"
 };
 
-const colorMap = { 위험: "#e74c3c", 주의: "#f39c12", 안전: "#2ecc71" };
+const colorMap = { 위험: "#e74c3c", 주의: "#f39c12", 안전: "#2ecc71",미확인: "#cccccc"  };
 let chartMetaList = [];
-function getRiskLabel(score) {
-  const abs = Math.abs(score);
-  if (abs > 20) return "위험";
-  if (abs > 0) return "주의";
-  return "안전";
-}
+
 
 function drawChart(canvasId, score, risk) {
   const canvas = document.getElementById(canvasId);
@@ -102,18 +99,22 @@ function drawChart(canvasId, score, risk) {
 
   if (Chart.getChart(canvas)) Chart.getChart(canvas).destroy();
 
+  
+
+  const isUnknown = score === "na";
   const colorMap = {
     위험: "#e74c3c",
     주의: "#f39c12",
-    안전: "#2ecc71"
+    안전: "#2ecc71",
+    미확인: "#cccccc"  // ✅ 회색 추가
   };
 
   new Chart(canvas, {
     type: "doughnut",
     data: {
       datasets: [{
-        data: [100], 
-        backgroundColor: [colorMap[risk]], 
+        data: [100],
+        backgroundColor: [colorMap[risk]],
       }]
     },
     options: {
@@ -135,9 +136,8 @@ function drawChart(canvasId, score, risk) {
         ctx.fillStyle = "#333";
         ctx.font = "bold 14px sans-serif";
         ctx.fillText(risk, width / 2, height / 2 + 10);
-ctx.font = "normal 12px sans-serif";
-ctx.fillText(`${score}점`, width / 2, height / 2 + 30);
-
+        ctx.font = "normal 12px sans-serif";
+        ctx.fillText(isUnknown ? "확인 불가" : `${score}점`, width / 2, height / 2 + 30);  // ✅ "확인 불가" 텍스트
       }
     }]
   });
@@ -150,15 +150,23 @@ function renderRiskCards(deductions) {
 
   deductions.forEach(d => {
     const r = d.reason;
-    if (r.includes("근저당권")) scoreMap.mort += d.point;
-    if (r.includes("가압류")) scoreMap.prior += d.point;
-    if (r.includes("압류")) scoreMap.seiz += d.point;
-    if (r.includes("계약일") && r.includes("이후")) scoreMap.after += d.point;
-    if (r.includes("불일치")) scoreMap.owner += d.point;
-    if (r.includes("신탁")) scoreMap.trust += d.point;
-    if (r.includes("가등기")) scoreMap.res += d.point;
-    if (r.includes("경매")) scoreMap.auction += d.point;
-    if (r.includes("임차권")) scoreMap.lease += d.point;
+    const p = d.point;
+    if (p === null || p === undefined) return;
+    if (r.includes("근저당권")) scoreMap.mort += p;
+    if (r.includes("가압류")) scoreMap.prior += p;
+    if (r.includes("압류")) scoreMap.seiz += p;
+    if (r.includes("계약일") && r.includes("이후")) scoreMap.after += p;
+    if (r.includes("불일치")) scoreMap.owner += p;
+    if (r.includes("신탁")) scoreMap.trust += p;
+    if (r.includes("가등기")) scoreMap.res += p;
+    if (r.includes("경매")) scoreMap.auction += p;
+    if (r.includes("임차권")) scoreMap.lease += p;
+    if (r.includes("보증금")) scoreMap.mort = "na";
+    if (r.includes("계약일") && r.includes("미입력")) scoreMap.after = "na";
+    if (r.includes("임대인") && r.includes("미입력")) scoreMap.owner = "na";
+    if (r.includes("주소") && r.includes("미입력")) scoreMap.mort = "na"; // 또는 별도 address 항목을 만들 수도 있음
+    if (r.includes("주소") && r.includes("추출할 수 없음")) scoreMap.mort = "na";
+
   });
 
   const sortedKeys = Object.keys(scoreMap).sort((a, b) => {
@@ -288,15 +296,16 @@ ${reasonText}
     if (!isActionStarted && fullText.includes("추천 조치")) {
       isActionStarted = true;
       const splitIndex = fullText.indexOf("추천 조치");
-      const before = fullText.slice(0, splitIndex);
-      const after = fullText.slice(splitIndex);
-      summaryText = before.replace("자료 요약:", "").trim();
-      actionText = after.trim();
+      summaryText = fullText.slice(0, splitIndex).replace("자료 요약:", "").trim();
+      actionText = fullText.slice(splitIndex).trim();
     } else if (isActionStarted) {
       actionText += chunk;
+    } else {
+      
+      summaryText = fullText.replace("자료 요약:", "").trim();
     }
 
-    summaryEl.innerHTML = formatGptReport(summaryText, actionText); // ✅ 통합 렌더링
+    summaryEl.innerHTML = formatGptReport(summaryText, actionText);
   }
 }
 
@@ -372,7 +381,7 @@ function showGptLoadingSpinner() {
     summaryEl.innerHTML = `
       <div class="report-loading">
         <div class="spinner"></div>
-        <p class="loading-text">GPT 리포트를 생성 중입니다...</p>
+        <p class="loading-text">리포트를 생성 중입니다...</p>
       </div>
     `;
   }
@@ -412,7 +421,15 @@ document.getElementById("start-check-btn").addEventListener("click", async () =>
     const fetchReport = fetch("http://127.0.0.1:8000/trust-check", {
       method: "POST",
       body: formData
-    }).then(res => res.json());
+    })
+      .then(async res => {
+        console.log("🎯 API 상태코드:", res.status);
+        if (!res.ok) {
+          const text = await res.text();
+          throw new Error(`API 오류: ${res.status} - ${text}`);
+        }
+        return res.json();
+      });
 
     const [_, report] = await Promise.all([waitAtLeast4Sec, fetchReport]);
 

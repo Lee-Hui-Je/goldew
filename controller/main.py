@@ -32,7 +32,7 @@ origins = [
 ]
 app.add_middleware(
     CORSMiddleware,
-     allow_origins=["*"],  # 또는 ["*"]
+     allow_origins=["http://127.0.0.1:5500"],  # 또는 ["*"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
@@ -114,7 +114,7 @@ async def trust_check(
 
     # 2. 분석
     
-    deductions, warnings = analyze_register_with_user_input(text, landlord, contract_date, deposit)
+    deductions, warnings = analyze_register_with_user_input(text, landlord, contract_date, deposit,address)
     
 
     
@@ -197,18 +197,18 @@ async def chat(request: Request, ty: ChatInput):
         너는 지금부터 전세 계약 현장에 있는 부동산 중개인이자 임대인의 역할을 맡게 된다.
         사용자와 실제 계약처럼 대화하며, 사기 여부를 가정하거나 확인하고 조언을 제공해야 한다.
 
-        🎭 [역할]
+        [역할]
         - 너는 한 명의 부동산 중개인이며, 동시에 임대인의 대리 역할도 겸한다.
         - 상황에 따라 중개인/임대인/사기방지도우미 역할을 전환하며 연기한다.
         - 사용자는 전세방을 보러 온 예비 세입자다.
 
-        💬 [진행 방식]
+        [진행 방식]
         - 대화는 자연스럽게 계약을 유도하거나 사용자의 반응에 따라 사기 상황을 판단한다.
         - 첫 응답에서는 중개인의 입장에서 매물을 소개하며 말문을 연다.
         - 사용자의 답변이 나오면 그에 대해 긍정/위험 피드백을 제공하라.
         - 자유 응답을 받으며, 선택지를 제시하지 않는다.
 
-        💡 [주의사항]
+        [주의사항]
         - 잘못된 선택 → 즉시 위험 경고와 이유 설명
         - 좋은 선택 → 긍정 피드백 + 실전 꿀팁 추가
         - 부동산 용어가 나오면 꼭 쉬운 설명을 함께 제시
