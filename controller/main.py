@@ -20,9 +20,12 @@ from .pdf_parser import extract_text_from_pdf
 from .risk import analyze_register_with_user_input, generate_summary_and_actions
 app = FastAPI()
 
-@app.get("/")
-def test():
-    return {"Hello": "World"}
+# 라우터
+from controller.map import router as map_router
+
+# 라우터 등록
+app.include_router(map_router)
+
 origins = [
     "http://localhost:5500",
     "http://127.0.0.1:5500"
