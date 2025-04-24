@@ -1,282 +1,422 @@
 :root {
-    --main-color: #6363DD;
-    --bg-color: #F9FAFB;
-    --text-dark: #1E1E1E;
-    --text-light: #666666;
-  }
-  
-  body {
-    margin: 0;
-    font-family: 'Noto Sans KR', sans-serif;
-    background-color: var(--bg-color);
-    color: var(--text-dark);
-  }
-  
-  .main-header {
-    position: relative;
-    text-align: center;
-    background-color: white;
-    padding: 1rem;
-  }
-  
-  .logo {
-    width: 180px;
-    margin: 0 auto 1rem;
-    display: block;
-  }
-  
-  .auth-top {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .auth-link {
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.9rem;
-    color: var(--main-color);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  
-  .auth-link:hover {
-    color: #4b4bcf;
-  }
-  
-  .nav-menu {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 2.3rem;
-    font-size: 1.1rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .nav-menu a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    padding: 0.5rem;
-  }
-  
-  .nav-menu a.active {
-    border-bottom: 2px solid var(--main-color);
-    color: var(--main-color);
-  }
-  
-  /* 신뢰검사 페이지 전체 레이아웃 */
-  .trust-page {
-    padding: 3rem 1rem;
-    max-width: 1200px;
-    margin: auto;
-    text-align: center;
-  }
-  
-  .trust-page h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 0.5rem;
-  }
-  
-  .trust-page .subtitle {
-    color: var(--text-light);
-    margin-bottom: 2rem;
-  }
-  
-  /* 좌우 2단 영역 */
-  .trust-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-  
-  .trust-left,
-  .trust-right {
-    flex: 1 1 45%;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1.2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    box-sizing: border-box;
-  }
-  
-  /* 모바일 반응형 */
-  @media screen and (max-width: 768px) {
-    .trust-left,
-    .trust-right {
-      flex: 1 1 100%;
-    }
-  }
-  
-  /* 업로드 박스 */
-  .upload-box {
-    text-align: center;
-    border: 2px dashed #ccc;
-    border-radius: 1rem;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    background-color: #fff;
-    transition: background 0.3s, border-color 0.3s;
-  }
-  
-  .upload-box.drag-over {
-    border-color: var(--main-color);
-    background-color: #f0edff;
-  }
-  
-  .upload-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-  .upload-label {
-    display: inline-block;
-    font-size: 1rem;
-    color: #333;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: color 0.3s, border-color 0.3s;
-    text-decoration: underline;
-  }
-  .upload-click-area{
-    display: flex;
+  --main-color: #6363DD;
+  --bg-color: #F9FAFB;
+  --text-dark: #1E1E1E;
+  --text-light: #666666;
+}
+
+/* 전체 페이지 기본 */
+body {
+  margin: 0;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+}
+
+/* 헤더 + 메뉴 */
+.main-header {
+  position: relative;
+  text-align: center;
+  background-color: white;
+  padding: 1rem;
+}
+
+.logo {
+  width: 180px;
+  margin: 0 auto 1rem;
+  display: block;
+}
+
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  gap: 2.3rem;
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  padding: 0.5rem;
+}
+
+.nav-menu a.active {
+  border-bottom: 2px solid var(--main-color);
+  color: var(--main-color);
+}
+
+/* 메인 페이지 레이아웃 */
+.trust-page {
+  padding: 3rem 1rem;
+  max-width: 1200px;
+  margin: auto;
+  text-align: center;
+}
+
+.trust-page h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.trust-page .subtitle {
+  color: var(--text-light);
+  margin-bottom: 2rem;
+}
+
+/* 업로드 + 입력 박스 배치 */
+.upload-and-input {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin: 2rem auto 3rem;
+}
+
+/* 업로드/입력 박스  */
+.upload-box {
+  width: 540px;
+  height: 320px; 
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  padding: 1.2rem 2rem 2rem 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: stretch;
+}
+.input-box {
+  width: 540px;
+  height: 320px; 
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 1rem;
+  padding: 1.2rem 2rem 2rem 2rem; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; 
+  align-items: stretch;
+}
+
+.upload-box h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 2.0rem;              
+  margin-bottom: 2.0rem;      
+  line-height: 1.4;
+}
+
+
+.input-box h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-top: 0;              
+  margin-bottom: 1.8rem;      
+  line-height: 1.4;
+}
+
+
+/* 업로드 박스 내부 */
+.upload-click-area {
+  display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  margin-top: 1.8rem;
+}
+
+.upload-icon {
+  font-size: 2rem;
+}
+
+.upload-label {
+  font-size: 1rem;
+  color: #333;
+  text-decoration: underline;
   cursor: pointer;
-  transition: color 0.3s;
-  }
-  .upload-label:hover {
-    color: #6c63ff;              
-          
-  }
-  .file-input {
-    display: none;
-  }
-  
-  /* .file-name {
-    font-size: 1rem;
-    color: #555;
-    margin-top: 0.5rem;
-  } */
-  .file-name {
-    margin-top: 8px;
-    font-size: 0.9rem;
-    color: #999;
-    transition: color 0.3s;
-  }
+}
 
-  .clear-btn {
-    margin-top: 5px;
-    padding: 4px 10px;
-    font-size: 0.85rem;
-    border: none;
-    background-color: #eee;
-    color: #333;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  .clear-btn:hover {
-    background-color: #ddd;
-  }
-  
+.file-name {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #999;
+}
 
-  /* 계약 정보 입력 */
-  .trust-form {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-top: 1rem;
-    text-align: left;
-  }
+.clear-btn {
+  display: inline-block;
+  margin: 6px auto 0; /* 상단 여백 + 중앙 정렬 */
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  background-color: #ddd;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+
+.clear-btn:hover {
+  background-color: #ddd;
+}
+
+.trust-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 2rem; /* 행 간격 / 열 간격 */
+  margin-top: 1rem;
+}
+
+.input-pair {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-pair label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.input-pair input {
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.8rem;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+
+.trust-form label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.trust-form input {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.8rem;
+  background-color: white;
+  box-sizing: border-box;
+}
+
+/* 분석 버튼 */
+.trust-check {
+  margin-top: 2rem;
+}
+
+#start-check-btn {
+  background-color: var(--main-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(92, 78, 252, 0.2);
+}
+
+#start-check-btn:hover {
+  background-color: #4538d8;
+}
+
+/* 로딩 스피너 */
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
   
-  .trust-form input,
-  .trust-form select {
-    width: 100%;
-    padding: 0.7rem 1rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.8rem;
-    box-sizing: border-box;
-    margin-bottom: 12px;
-  }
+/* === 공통 화살표 버튼 스타일 === */
+.arrow-btn {
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  width: 2.4rem;
+  height: 2.4rem;
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 1;
+  transition: background 0.2s;
+}
+
+.arrow-btn:hover {
+  background-color: #6363DD;
+  color: white;
+}
+
+/* 전체 슬라이더 구조 */
+.accordion-slider-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* 카드 감싸는 wrapper */
+.accordion-wrapper {
+  overflow: hidden;
+  max-width: calc(260px * 3 + 1.5rem * 2); /* 카드 3개 + 간격 */
+  flex: 1;
+  box-sizing: border-box;
+}
+
+/* 실제 카드 표시 영역 */
+.accordion-visible {
+  display: flex;
+  gap: 1.5rem;
+  transition: transform 0.4s ease;
+  width: max-content;
+}
+
+/* 아래쪽 가운데 버튼 정렬 */
+.accordion-controls {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.score-item {
+  min-width: 260px;
+  max-width: 260px;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.score-item h4 {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+}
+
+.score-item p {
+  font-size: 0.85rem;
+  color: #777;
+  margin-top: 0.5rem;
+}
+
+.score-item canvas {
+  width: 100%;
+  max-width: 160px;
+  height: 160px;
+  margin: auto;
+}
+
+/* 총점 */
+.chart-total-and-accordion-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 1.5rem;
+  max-width: 1280px;
+  margin: 3rem auto;
+  flex-wrap: nowrap;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+.chart-item.fixed-score {
+  width: 260px;
+  min-height: 300px;    /* ✅ 내부 공간 보장 */
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  position: relative;
+  text-align: center;
+  flex-shrink: 0;
   
-  .form-row {
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-  }
-  
-  .checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-    margin-top: 0.5rem;
-    white-space: nowrap;
-  }
-  
-  #start-check-btn {
-    background-color: #6363DD;         /* 보라 계열 포인트 색 */
-    color: white;                      /* 글자색 */
-    border: none;
-    border-radius: 8px;                /* 둥근 모서리 */
-    padding: 12px 24px;                /* 안쪽 여백 */
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 10px rgba(92, 78, 252, 0.2); /* 그림자 */
-  }
-  
-  #start-check-btn:hover {
-    background-color: #4538d8;         
-    transform: translateY(-2px);       
-  }
-  
-  /* 리포트 영역 */
-  .trust-report {
-    display: none;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1.5rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    max-width: 2000px;
-    margin: auto;
-    text-align: center;
-    border-top: 1px solid #eee;
-  }
-  
-  .trust-report h3 {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-  .trust-form label {
-    font-size: 1.2rem;
-    font-weight: 500;
-   
-  }
-  .trust-report .report-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    margin-left: 3rem;
-    margin-right: 3rem;
-  }
-  
-  .trust-report button {
-    background: white;
-    border: 1px solid #ccc;
-    border-radius: 999px;
-    padding: 0.5rem 1.2rem;
-    cursor: pointer;
-  }
-  
+}
+#chart-total {
+  display: block;
+  width: 200px;   /* ✅ 확정 */
+  height: 200px;
+  max-width: none;  /* ✅ 제한 제거 */
+  margin: 2rem auto 0 auto;
+}
+
+.chart-label-text {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* 툴팁 */
+.tooltip-container.bottom-right {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+}
+
+.info-icon {
+  font-size: 16px;
+  color: #999;
+  cursor: pointer;
+}
+
+.tooltip-box {
+  display: none;
+  position: absolute;
+  bottom: 130%;
+  right: 0;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  padding: 0.7rem 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-size: 0.85rem;
+  color: #333;
+  white-space: nowrap;
+  z-index: 10;
+  min-width: 160px;
+}
+
+.tooltip-container:hover .tooltip-box {
+  display: block;
+}
+
   /* 다음 버튼 */
   .main-button {
     margin-top: 1rem;
@@ -293,77 +433,103 @@
     background-color: #4b4bcf;
   }
   
-  .spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 36px;
-    height: 36px;
-    animation: spin 1s linear infinite;
-    margin: auto;
+  .gpt-report {
+    width: 100%;
+    padding: 2rem 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
   }
   
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+  .gpt-card {
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 2rem 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: box-shadow 0.3s ease;
+    border: 1px solid #eee;
   }
   
-  #summary-text {
-    font-family: 'Noto Sans KR', sans-serif;
-    font-size: 1rem;
-    color: #333;
-    line-height: 1.6;
-    white-space: pre-wrap;
-    word-break: keep-all;
+  .gpt-card:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
   }
   
-    .trust-report {
-      max-width: 720px;
-      margin: 40px auto;
-      padding: 40px;
-      background: #fdfdfd; 
-      border: 1px solid #ddd;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05); 
-      font-family: 'Noto Sans KR', sans-serif;
-      color: #333;
-    }
-  
-  .trust-report h2 {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
+  .gpt-card h3 {
+    font-size: 1.4rem;
     font-weight: 700;
-    color: #222;
+    margin-bottom: 1.5rem;
+    color: #1E1E1E;
+    text-align: center;
   }
   
   .report-section {
-    margin-bottom: 2rem;
+    padding: 1rem 0;
+    line-height: 1.6;
   }
   
-  .report-section h3 {
+  .report-section h4 {
     font-size: 1.1rem;
-    font-weight: 600;
-    color: #2c3e50;
     margin-bottom: 0.8rem;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 4px;
+    color: #222;
   }
   
-  .report-section p {
-    margin: 4px 0;
-    line-height: 1.5;
+  .report-list,
+  .report-actions {
+    padding-left: 1.5rem;
+    margin: 0;
   }
   
-  .risk-label {
-    color: #e67e22;
-    font-weight: bold;
+  .report-list li {
+    margin-bottom: 0.6rem;
   }
   
-  .report-source {
-    font-size: 0.85rem;
-    color: #777;
+  .report-actions ol {
+    list-style-position: inside;
+    padding-left: 1.2rem;
+  }
+  
+  .report-actions li {
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+    text-indent: -0.4rem;
+  }
+  
+  .report-summary {
+    margin-top: 1.5rem;
+    padding: 1rem 1.2rem;
+    border-left: 4px solid #6363DD;
+    background-color: #f9f9fc;
+    font-weight: 500;
+    color: #333;
+    border-radius: 0.5rem;
+  }
+  
+  .risk-table h5 {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .risk-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.6rem;
+    font-size: 0.95rem;
+  }
+  
+  .risk-table th,
+  .risk-table td {
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #ddd;
     text-align: left;
-    margin-top: 3rem;
   }
-
   
+  .risk-table th {
+    background-color: #f0f0f5;
+    color: #333;
+    font-weight: 600;
+  }
+  
+ 

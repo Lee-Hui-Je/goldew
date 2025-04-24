@@ -155,7 +155,27 @@ class ChatInput(BaseModel):
     type: str
     chat_bool:bool
 
+@app.post("/reportsummary")
+async def stream_summary(request: Request):
+    data = await request.json()
+    prompt = data.get("prompt", "")
+    client = OpenAI()
 
+    def generate():
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "부동산 등기부 분석 리포트를 형식에 맞게 작성해주세요."},
+                {"role": "user", "content": prompt}
+            ],
+            stream=True,
+        )
+        for chunk in response:
+            delta = chunk.choices[0].delta
+            if hasattr(delta, "content") and delta.content:
+                yield delta.content
+
+    return StreamingResponse(generate(), media_type="text/plain")
 
 # 대화 기록 누적용
 history = []
