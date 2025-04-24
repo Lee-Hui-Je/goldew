@@ -4,146 +4,127 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>임대인 신뢰 검사 - HOWS</title>
+
+  <!-- 스타일 -->
   <link rel="stylesheet" href="../css/trust.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- 스크립트 -->
   <script src="../js/trust.js" defer></script>
 </head>
 
-    <body>
-      <header class="main-header">
-        <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo" /></a>
-        <nav class="nav-menu">
-          <a href="./index.html">Home</a>
-          <a href="./map.html">Map</a>
-          <a href="./trust.html" class="active">Trust</a>
-          <a href="./advices.html">Advices</a>
-        </nav>
-      </header>
-        
+<body>
+  <header class="main-header">
+    <a href="./index.html"><img src="../../assets/hows_logo.png" alt="HOWS 로고" class="logo" /></a>
+    <nav class="nav-menu">
+      <a href="./index.html">Home</a>
+      <a href="./map.html">Map</a>
+      <a href="./trust.html" class="active">Trust</a>
+      <a href="./advices.html">Advices</a>
+    </nav>
+  </header>
+
   <main class="trust-page">
     <h1>임대인 신뢰 검사</h1>
     <p class="subtitle">등기부등본과 계약 관련 정보를 입력하세요.</p>
 
-    <!-- 좌우 나뉜 두 개의 영역 -->
-    <div class="trust-row">
-      <!-- 왼쪽: 파일 첨부 -->
-      <section class="trust-left">
-        <h2>파일 첨부</h2>
 
-        <div class="upload-box">
-          <label for="file1" class="upload-click-area">
+    <section class="upload-and-input">
+      <div class="upload-box">
+        <h3>1. 등기부등본 업로드</h3>
+        <label for="file1" class="upload-click-area">
           <div class="upload-icon">⬆️</div>
-          <div class="upload-label">등기부등본 업로드</div>
-          </label>
-          <button type="button" class="clear-btn" style="display: none;">삭제</button>
-          <input type="file" id="file1" class="file-input" accept=".pdf,image/*" style="display: none;" />
-          <p class="file-name"></p>
-        </div>
-        
-        <div class="upload-box">
-          <label for="file2" class="upload-click-area">
-          <div class="upload-icon">📄</div>
-          <div class="upload-label">계약서 업로드</div>
-          </label>
-          <button type="button" class="clear-btn" style="display: none;">삭제</button>
-          <input type="file" id="file2" class="file-input" accept=".pdf,image/*" style="display: none;" />
-          <p class="file-name"></p>
-        </div>
-        <div class="upload-box">
-          <label for="file3" class="upload-click-area">
-          <div class="upload-icon">📇</div>
-          <div class="upload-label">추가자료 업로드</div>
-          </label>
-          <button type="button" class="clear-btn" style="display: none;">삭제</button>
-          <input type="file" id="file3" class="file-input" accept=".pdf,image/*" style="display: none;" />
-          <p class="file-name"></p>
-        </div>
+          <div class="upload-label">파일 업로드</div>
+        </label>
+        <button type="button" class="clear-btn" style="display: none;">삭제</button>
+        <input type="file" id="file1" class="file-input" accept=".pdf,image/*" style="display: none;" />
+        <p class="file-name"></p>
+      </div>
 
-    
-      </section>
-
-      <!-- 오른쪽: 계약 정보 -->
-      <section class="trust-right">
-        <h2>추가 정보 입력</h2>
+      <div class="input-box">
+        <h3>2. 추가 정보 입력 (선택)</h3>
         <form class="trust-form">
-          <label for="own_name">임대인 이름</label>
-          <input type="text" placeholder="임대인 이름" />
-          
-            <label for="date">계약날짜</label>
-            <input type="date" />
+          <div class="input-pair">
+            <label for="own_name">임대인 이름</label>
+            <input type="text" id="own_name" placeholder="임대인 이름" />
+          </div>
+          <div class="input-pair">
+            <label for="date">계약 날짜</label>
+            <input type="date" id="date" />
+          </div>
+          <div class="input-pair">
             <label for="money">보증금 금액</label>
-          <input type="text" placeholder="보증금 (원)" />
-          
-          <label for="address">임대차 주소</label>
-          <input type="text" placeholder="임대차 주소" />
+            <input type="text" id="money" placeholder="예: 10,000,000" />
+          </div>
+          <div class="input-pair">
+            <label for="address">임대차 주소</label>
+            <input type="text" id="address" placeholder="임대차 주소" />
           </div>
         </form>
-      </section>
-      
-    </div>
-
-    <section class="trust-check">
-      <button id="start-check-btn">분석하기</button>
+      </div>
     </section>
-    
-<!-- 아래쪽: 리포트 영역 -->
-<!--  로딩 스피너 -->
+
+<!-- 분석 버튼 -->
+<section class="trust-check">
+  <button id="start-check-btn">분석하기</button>
+</section>
+
+<!-- 로딩 스피너 -->
 <div id="loading-spinner" style="display: none; text-align: center; margin: 30px 0;">
   <div class="spinner"></div>
   <p style="margin-top: 10px; font-size: 0.95rem; color: #555;">분석 중입니다...</p>
 </div>
 
-<!-- 리포트 본문 -->
-<section class="trust-report" style="display: none;">
-  <h2>임대인 신뢰도 분석 리포트</h2>
+<!-- 결과 영역 -->
+<div class="chart-total-and-accordion-wrapper" id="result-section" style="display: none; max-width: 1200px; margin: auto; padding: 2rem; font-family: 'Noto Sans KR', sans-serif;">
 
-  
-  <div class="report-section">
-    <h3>입력 정보 요약</h3>
-    <p><strong>임대인:</strong> <span id="input-landlord">-</span></p>
-    <p><strong>계약일:</strong> <span id="input-date">-</span></p>
-    <p><strong>주소:</strong> <span id="input-address">-</span></p>
-    <p><strong>보증금:</strong> <span id="input-deposit">-</span></p>
+  <!-- 왼쪽: 총 신뢰 점수 -->
+  <div class="chart-item fixed-score">
+    <h4 id="total-score-title">총 신뢰 점수</h4>
+    <canvas id="chart-total" width="200" height="200"></canvas>
+    <p id="total-score-label" class="chart-label-text" style="display: none;">-</p>
+    <div class="tooltip-container bottom-right">
+      <i class="fas fa-info-circle info-icon"></i>
+      <div class="tooltip-box">
+        <strong>위험도 기준</strong><br/>
+        🔴 위험: 80점 미만<br/>
+        🟠 주의: 80~89점<br/>
+        🟢 안전: 90점 이상
+      </div>
+    </div>
   </div>
 
-  
-  <div class="report-section">
-    <h3>종합 점수</h3>
-    <p>
-      <strong><span id="score">--</span>점</strong> /
-      <strong><span id="grade">--</span></strong> /
-      <span class="risk-label" id="risk-label">--</span>
-    </p>
+<!-- 오른쪽: 슬라이더 카드 + 하단 버튼 그룹 -->
+<div class="accordion-slider-zone">
+  <!-- 카드 3개 슬라이드 영역 -->
+  <div class="accordion-wrapper">
+    <div class="accordion-visible" id="accordion-visible">
+      <!-- JS로 카드 삽입 -->
+    </div>
   </div>
 
- 
-  <div class="report-section" id="deduction-section">
-    <h3>위험 요인</h3>
-    <div id="deduction-list"></div>
+  <!-- 슬라이드 버튼: 하단 중앙 정렬 -->
+  <div class="accordion-controls">
+    <button id="arrow-left" class="arrow-btn">◀</button>
+    <button id="arrow-right" class="arrow-btn">▶</button>
   </div>
+</div>
 
-  
-  <div class="report-section">
-    <h3>분석 요약</h3>
-    <pre id="summary-text" style="white-space: pre-wrap;">-</pre>
-  </div>
-  
-
-  <div class="report-section">
-    <h3>추천 조치</h3>
-    <div id="action-list"></div>
-  </div>
-
-  <div class="report-source">
-    <p><small>※ 분석 근거: 등기부등본, 계약서, 입력된 계약 정보 기반</small></p>
+</div>
+<!-- GPT 리포트 영역: 분석 후에만 표시 -->
+<section id="gpt-report" class="gpt-report" style="display: none;">
+  <div class="gpt-card">
+    <h3>등기부 분석 리포트</h3>
+    <div id="gpt-summary"></div>
+    
   </div>
 </section>
 
 
-
   </main>
-
-
 </body>
 </html>

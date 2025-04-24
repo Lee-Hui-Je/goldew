@@ -8,14 +8,15 @@ pool_default = psycopg_pool.ConnectionPool(
     max_size=config.PGSQL_TEST_POOL_MAX_SIZE,
     max_idle=config.PGSQL_TEST_POOL_MAX_IDLE
 )
-# 회원가입
-def insert_mem(id, pw, name, phone, email):
+
+def map_imfo():
     with pool_default.connection() as conn:
         cur = conn.cursor(row_factory=psycopg.rows.dict_row)
 
         try:
-            cur.execute("INSERT INTO public.member (id, pw,name,phone,email) VALUES (%s, %s,%s, %s,%s)", (id, pw, name, phone, email))
-            conn.commit()
+            cur.execute("SELECT * FROM public.tb_property")
+            user = cur.fetchall()
+            return user
 
         except psycopg.OperationalError as err:
             print(err)
@@ -28,15 +29,13 @@ def insert_mem(id, pw, name, phone, email):
             return False
         finally:
             cur.close()
-    return True
 
-# 로그인
-def get_user_id(id):
+def house_imfo(id):
     with pool_default.connection() as conn:
         cur = conn.cursor(row_factory=psycopg.rows.dict_row)
 
         try:
-            cur.execute("SELECT * FROM public.member WHERE id = %s", (id,))
+            cur.execute("SELECT * FROM public.tb_property_detail WHERE property_id = %s", (id,))
             user = cur.fetchone()
             return user
 
@@ -51,26 +50,3 @@ def get_user_id(id):
             return False
         finally:
             cur.close()
- 
-#회원정보 수정
-def update_mem(id, pw, phone, email):
-    with pool_default.connection() as conn:
-        cur = conn.cursor(row_factory=
-                          psycopg.rows.dict_row)
-
-        try:
-            cur.execute("UPDATE public.member SET pw = %s, phone = %s, email = %s WHERE id = %s", (pw, phone, email, id))
-            conn.commit()
-
-        except psycopg.OperationalError as err:
-            print(err)
-        except psycopg.ProgrammingError as err:
-            print(err)
-        except psycopg.InternalError as err:
-            print(err)
-        except Exception as err:
-            print(err) 
-            return False
-        finally:
-            cur.close()
-    return True
