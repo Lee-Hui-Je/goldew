@@ -124,37 +124,70 @@ body {
   width: 100%;
   height: 100%;
 }
-
-.map-toolbar {
+.search_box{
   position: absolute;
   top: 2rem;
   left: 1.5rem;
+}
+
+.search_box .map-toolbar {
   display: flex;
   gap: 0.5rem;
   background: rgba(255, 255, 255, 0.9);
   padding: 0.6rem 1rem;
-  border-radius: 999px;
+  border-radius: 50px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 100;
   align-items: center;
   opacity: 0.7;
   transition: opacity .3s;
+  margin-bottom: 15px;
 }
-.map-toolbar:hover{
+.search_box .map-toolbar:hover{
   opacity: 1;
 }
 
-
-.map-toolbar.toact:hover{
+.search_box .map-toolbar.toact:hover{
   opacity: 1;
 }
 
-.map-toolbar input {
+.search_box .map-toolbar input {
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 999px;
   outline: none;
   font-size: 0.9rem;
+}
+
+.search_box .house_option{
+  display: flex;
+  justify-content: space-around;
+  background-color: #fff;
+  padding: 10px;
+  border-radius:50px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0.7;
+  transition: opacity .3s;
+}
+.search_box .house_option button{
+  width: 80px;
+  height: 35px;
+  border-radius: 30px;
+  border: none;
+  background-color: red;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  opacity: 0.7;
+}
+.search_box .house_option:hover,
+.search_box .house_option button:hover{
+  opacity: 1;
+  transition: opacity .3s;
+}
+.search_box .house_option button:hover{
+  background: var(--main-color);
+  color: #fff;
+  cursor: pointer;
 }
 
 .filter-btn {
@@ -191,7 +224,7 @@ body {
   align-items: center;
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 2px solid #b9b9b9;
+  border-bottom: 2px solid #dadada;
 }
 .back-box .back{
   background-image: url("../../assets/back.png");
@@ -219,31 +252,90 @@ body {
   flex-direction: column;
   border-radius: 10px;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .info-panel .house_imfo_box .imfo_price{
-  color: rgb(214, 3, 3);
+  color: var(--main-color);
   font-weight: 700;
-  font-size: 18px;
+  font-size: 17px;
 }
-.info-panel .house_imfo_box .imfo_{
-  font-size: 14px;
-  color: #575757;
+.info-panel .house_imfo_box .room_box{
+  font-size: 15px;
+  color: #000000;
   padding-bottom: 10px;
-  border-bottom: 1px solid #9e9e9e;
+  border-bottom: 1px solid #dadada;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
 }
+.info-panel .house_imfo_box .room_box p:nth-child(2){
+  font-size: 12px;
+  font-weight: 100;
+  display: flex;
+  align-items: end;
+}
+
 .info-panel .house_imfo_box .imfo_grid{
   display: grid;
   grid-template-columns:2fr 1fr;
   font-size: 14px;
   gap: 10px;
   padding-bottom: 10px;
-  border-bottom:1px solid #9e9e9e;
+  border-bottom:1px solid #dadada;
 }
 
 .info-panel .house_imfo_box .imfo_year{
   font-size: 14px;
   color: #818181;
+}
+.info-panel .house_imfo_box .house_date{
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid #dadada;
+  padding-bottom: 10px;
+}
+
+
+/* 오차율 차트 */
+.info-panel .mistake{
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  gap: 20px;
+}
+.info-panel .mistake h3{
+  font-size: 17px;
+}
+
+.info-panel .mistake .mistake_risk{
+  display: flex;
+  align-items: end;
+  font-weight: 500;
+  gap: 15px;
+}
+.info-panel .mistake .mistake_risk .mistake_prices{
+  font-size: 12px;
+}
+.info-panel .mistake .mistake_risk .mistake_prices p:nth-child(1){
+  font-weight: 700;
+}
+.info-panel .mistake .mistake_risk .mistake_prices .high{
+  color: rgb(180, 14, 14);
+}
+.info-panel .mistake .mistake_risk .mistake_prices .medium{
+  color: rgba(137, 146, 12, 0.747);
+}
+.info-panel .mistake .mistake_risk .mistake_prices .safe{
+  color: rgba(47, 128, 51, 0.747);
+}
+.info-panel .mistake .mistake_ex{
+  font-size: 10px;
+  display: flex;
 }
 
 .stars {
