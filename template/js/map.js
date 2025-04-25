@@ -239,13 +239,14 @@ async function house_imfo_box(id, house_kind) {
     house_date[1].textContent = `매물등록일 ${data.listing_date}`
     imfo_year.textContent = `입주 여부 ${data.immediate_move_in}`
 
+    const uuid = uuidv4();
     // 오차율 박스
     level_box.innerHTML = `
-      <canvas id="${data.property_id}" width="130" height="60"></canvas>
+      <canvas id="${uuid}" width="130" height="60"></canvas>
     `
-    setTimeout(() => {
-      canvas_chart(data.property_id, data.risk_level);
-    }, 1000);
+    // level_box.innerHTML = `
+    //   <canvas id="${data.property_id}" width="130" height="60"></canvas>
+    // `
 
     if(data.risk_level > 26){
       position_color = 'high'
@@ -265,16 +266,29 @@ async function house_imfo_box(id, house_kind) {
     mistake_prices[1].textContent = `전세가 ${data.jeonse_price}`
     mistake_prices[2].textContent = `추정가 ${data.estimated_jeonse_price}`
 
+    canvas_chart(uuid, data.property_id, data.risk_level);
+
+    radar_chart();
 
   } catch (error) {
       console.error("실패:", error);
   }
 }
 
-function canvas_chart(id, level){
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    const r = Math.random() * 16 | 0;
+    const v = c === 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
+function canvas_chart(uuid, id, level){
   let Acolor;
-  const canvas = document.getElementById(id);
-  if (!canvas) return;
+  const canvas = document.getElementById(uuid);
+  if (!canvas) {
+    return;
+  }
 
   if(level > 26){
     Acolor = 'rgb(180, 14, 14)'
@@ -289,7 +303,6 @@ function canvas_chart(id, level){
   if (chartInstances[id]) {
     chartInstances[id].destroy();
   }
-
 
   new Chart(canvas, {
     type: 'doughnut',
@@ -396,5 +409,52 @@ function gara_chart(id, level){
         ctx.save();
       }
     }]
+  });
+}
+
+function radar_chart() {
+  const canvas = document.querySelector("#radar_chart");
+  if (!canvas) return;
+
+  new Chart(canvas, {
+    type: 'radar', // ✅ 반드시 타입 명시!
+    data: {
+      labels: [
+        '동',
+        '전용면적 평',
+        'log 건축연차',
+        '방 수',
+        '방향',
+        '층 등급',
+        '보증보험'
+      ],
+      datasets: [{
+        label: 'My First Dataset',
+        data: [65, 59, 90, 81, 56, 55, 40],
+        fill: true,
+        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: 'rgb(255, 99, 132)',
+        pointBackgroundColor: 'rgb(255, 99, 132)',
+        pointBorderColor: '#fff',
+        borderWidth: 1,
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgb(255, 99, 132)'
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: '전세가 예측 근거',
+          font: {
+            size: 17
+          }
+        }
+      }
+    }
   });
 }

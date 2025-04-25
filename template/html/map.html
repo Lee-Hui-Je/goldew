@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fdq7mn54zc&submodules=geocoder,clustering"></script>
   <script src="../js/map.js" defer></script>
+  <script src="../js/map2.js" defer></script>
   <link rel="icon" href="/favicon.ico" />
 </head>
 <body class="map-page">
@@ -94,12 +95,27 @@
         </div>
       </div>
       <div class="house_details">
-
+        <div class="dchart">
+          <canvas id="radar_chart"></canvas>
+        </div>
+        <div class="dchart_text">
+        </div>
       </div>
     </aside>
   </main>
 
-  <!-- 네이버 지도 API -->
+  <!-- 즐겨찾기 -->
+  <div class="fav_box hoverable">
+    <div class="fav_first">
+      <div class="fav"></div>
+      <div class="fav_text">즐겨찾기</div>
+    </div>
+    <div class="fav_x">
+      <div class="fav_x_box">
+        <div class="fav_x_item"></div>
+      </div>
+    </div>
+  </div>
   
   
 </body>
