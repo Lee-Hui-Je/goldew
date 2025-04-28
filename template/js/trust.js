@@ -1,3 +1,22 @@
+window.addEventListener("DOMContentLoaded", () => {
+  const userId = localStorage.getItem("user_id");
+  console.log(" user_id 상태:", userId);
+
+  if (!userId) {
+    alert("로그인을 해주세요!");
+    sessionStorage.setItem("showLoginModal", "true");
+    window.location.href = "/template/html/index.html";
+    return;
+  }
+ 
+});
+
+function toggleHeaderUI() {
+  document.querySelector(".auth-top").style.display = "none";
+  document.querySelector(".auth-top-loggedin").style.display = "flex";
+}
+
+
 document.querySelectorAll(".file-input").forEach((input) => {
   input.addEventListener("change", (e) => {
     const file = e.target.files[0];
@@ -106,7 +125,7 @@ function drawChart(canvasId, score, risk) {
     위험: "#e74c3c",
     주의: "#f39c12",
     안전: "#2ecc71",
-    미확인: "#cccccc"  // ✅ 회색 추가
+    미확인: "#cccccc"  
   };
 
   new Chart(canvas, {

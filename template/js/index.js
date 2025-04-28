@@ -22,12 +22,12 @@ nextBtn.addEventListener("click", () => {
 showSlide(currentIndex);
 
 
-// 기존 로그인 모달 요소
+// 로그인 모달 
 const modal = document.getElementById("login-modal");
 const openBtn = document.querySelector(".login-link");
 const closeBtn = document.querySelector(".close");
 
-// 회원가입 모달 요소
+// 회원가입 모달 
 const joinModal = document.getElementById("join_modal");
 const joinOpenBtn = document.querySelector(".join-link");
 const joinCloseBtn = joinModal.querySelector(".close");
@@ -51,41 +51,40 @@ closeBtn.addEventListener("click", () => modal.style.display = "none");
 joinCloseBtn.addEventListener("click", () => joinModal.style.display = "none");
 
 
-// Create Account 클릭 시 로그인 모달 닫고 회원가입 모달 열기
 goToJoinLink.addEventListener("click", (e) => {
-e.preventDefault();
-modal.style.display = "none";
-joinModal.style.display = "block";
+  e.preventDefault();
+  modal.style.display = "none";
+  joinModal.style.display = "block";
 });
 
 function openModal(id) {
-document.getElementById(id).style.display = 'flex';
-}
-function closeModal(e) {
-if (e.target.className === 'modal' || e.target.className === 'modal-close') {
-  document.querySelectorAll('.modal, .modal-scam').forEach(m => m.style.display = 'none');
-}
+  document.getElementById(id).style.display = 'flex';
 }
 
-// 회원가입 후  로그인 모달 열기
+function closeModal(e) {
+  if (e.target.className === 'modal' || e.target.className === 'modal-close') {
+    document.querySelectorAll('.modal, .modal-scam').forEach(m => m.style.display = 'none');
+  }
+}
+
+// 회원가입
 async function handleJoinSubmit(event) {
-  event.preventDefault(); // 기본 제출 막기
+  event.preventDefault();
 
   const form = event.target;
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://34.132.18.41:8000/join", {
+    const res = await fetch("http://localhost:8000/join", {
       method: "POST",
       body: formData,
+      credentials: "include" 
     });
 
     const data = await res.json();
 
     if (res.ok && data.message === "success") {
       alert("회원가입 완료! 로그인 해주세요.");
-
-      // 회원가입 모달 닫고 로그인 모달 열기
       joinModal.style.display = "none";
       modal.style.display = "block";
       modal.querySelector("input[name='id']").focus();
@@ -99,7 +98,8 @@ async function handleJoinSubmit(event) {
 
   return false;
 }
-// 로그인처리
+
+//로그인
 window.handleLogin = async function(event) {
   event.preventDefault();
 
@@ -107,21 +107,19 @@ window.handleLogin = async function(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://34.132.18.41:8000/login", {
+    const res = await fetch("http://localhost:8000/login", {
       method: "POST",
-      body: formData
+      body: formData,
+      credentials: "include" 
     });
 
     const data = await res.json();
 
     if (res.ok) {
-      sessionStorage.setItem("access_token", data.access_token);
-      sessionStorage.setItem("user_id", data.user_id);
-
-      // 모달 닫기
+      // 로그인 성공
+      const userId = data.user_id;
+      localStorage.setItem("user_id", userId);
       document.getElementById("login-modal").style.display = "none";
-
-      //  UI 전환
       document.querySelector(".auth-top").style.display = "none";
       document.querySelector(".auth-top-loggedin").style.display = "flex";
     } else {
@@ -135,46 +133,57 @@ window.handleLogin = async function(event) {
   return false;
 }
 
-document.querySelector(".logout-link").addEventListener("click", (e) => {
+//로그아웃
+document.querySelector(".logout-link").addEventListener("click", async (e) => {
   e.preventDefault();
-  sessionStorage.removeItem("access_token");
-  alert("로그아웃 되었습니다!");
 
+  await fetch("http://localhost:8000/logout", {
+    method: "POST",
+    credentials: "include" 
+  });
+ 
+  localStorage.removeItem("user_id");
+  console.log("🗑 로그아웃 후 localStorage.user_id:", localStorage.getItem("user_id"));
+  document.getElementById("login-form")?.reset();
+
+  alert("로그아웃 되었습니다!");
 
   document.querySelector(".auth-top").style.display = "flex";
   document.querySelector(".auth-top-loggedin").style.display = "none";
-
-
 });
-
 
 window.addEventListener("DOMContentLoaded", () => {
-  const token = sessionStorage
-  .getItem("access_token");
+  const userId = localStorage.getItem("user_id");
+  console.log("▶ user_id 상태:", userId);
+   
+    if (userId) {
+      document.querySelector(".auth-top").style.display = "none";
+      document.querySelector(".auth-top-loggedin").style.display = "flex";
+    } else {
+      document.querySelector(".auth-top").style.display = "flex";
+      document.querySelector(".auth-top-loggedin").style.display = "none";
+    }
+  });
 
-  if (token) {
-    // 로그인된 UI
-    document.querySelector(".auth-top").style.display = "none";
-    document.querySelector(".auth-top-loggedin").style.display = "flex";
-  } else {
-    // 비로그인 UI
-    document.querySelector(".auth-top").style.display = "flex";
-    document.querySelector(".auth-top-loggedin").style.display = "none";
-  }
-});
 
+
+// 회원정보 수정
 async function handleeditSubmit(event) {
   event.preventDefault();
+
   const form = event.target;
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://34.132.18.41:8000/edit", {
+    const res = await fetch("http://localhost:8000/edit", {
       method: "POST",
       body: formData,
+      credentials: "include" 
     });
+
     const data = await res.json();
 
+    console.log("Response data:", data); // 디버깅을 위한 로그 추가
     if (res.ok && data.message === "수정 성공") {
       alert("회원정보 수정 완료!");
       document.getElementById("edit_modal").style.display = "none";
@@ -185,14 +194,34 @@ async function handleeditSubmit(event) {
     console.error("수정 오류:", err);
     alert("서버 오류 발생!");
   }
+
   return false;
 }
 
-document.querySelector(".edit-link").addEventListener("click", (e) => {
+
+document.querySelector(".edit-link").addEventListener("click", async (e) => {
   e.preventDefault();
-  const userId = sessionStorage.getItem("user_id");
-  document.querySelector('#edit_modal input[name="id"]').value = userId;
-  document.getElementById("edit_modal").style.display = "block";
+
+  try {
+    const res = await fetch("http://localhost:8000/userinfo", {
+      method: "GET",
+      credentials: "include"
+    });
+    
+    const data = await res.json();
+
+    if (res.ok) {
+      // 로그인 된 상태면 수정 모달 열기
+      document.getElementById("edit_modal").style.display = "block";
+      document.querySelector("#edit_modal input[name='id']").value = data.user_id; // 사용자 id 채워주기
+    } else {
+      alert("로그인이 필요합니다.");
+      window.location.reload();
+    }
+  } catch (err) {
+    console.error("사용자 정보 가져오기 실패:", err);
+    alert("서버 오류 발생!");
+  }
 });
 
 
@@ -202,8 +231,6 @@ const editCloseBtn = editModal.querySelector(".close");
 editCloseBtn.addEventListener("click", () => {
   editModal.style.display = "none";
 });
-
-
 // 팀원 모달
   document.querySelector('a[href="#team"]').addEventListener('click', function(e) {
     e.preventDefault();

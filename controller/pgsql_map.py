@@ -137,3 +137,4 @@ def house_oneroom(id):
             return False
         finally:
             cur.close()
+

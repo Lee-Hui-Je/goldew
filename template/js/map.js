@@ -11,6 +11,7 @@ const back = document.querySelector(".back-box .back")
 const opi = document.querySelector(".opi")
 const villa = document.querySelector(".villa")
 const  oneroom= document.querySelector(".oneroom")
+let currentHouseData = null;
 
 // 집 상세 정보 첫번째 박스
 const imfo_price = document.querySelector(".imfo_price")
@@ -172,6 +173,21 @@ window.addEventListener("DOMContentLoaded", () => {
       if (query) searchAddress(query);
     }
   });
+  const favBtn = document.querySelector('.opa-op');
+  if (favBtn) {
+    favBtn.addEventListener('click', () => {
+      const currentBg = getComputedStyle(favBtn).backgroundImage;
+
+      if (!currentHouseData) return;
+
+      if (currentBg.includes("love1.png")) {
+        favBtn.style.backgroundImage = 'url("../../assets/love.png")';
+        favInsert("cha", currentHouseData.address, currentHouseData.jeonse_price, currentHouseData.estimated_jeonse_price, currentHouseData.risk_level);
+      } else {
+        favBtn.style.backgroundImage = 'url("../../assets/love1.png")';
+      }
+    });
+  }
 });
 
 function searchAddress(query) {
@@ -269,6 +285,8 @@ async function house_imfo_box(id, house_kind) {
     canvas_chart(uuid, data.property_id, data.risk_level);
 
     radar_chart();
+
+    currentHouseData = data;
 
   } catch (error) {
       console.error("실패:", error);
@@ -417,7 +435,7 @@ function radar_chart() {
   if (!canvas) return;
 
   new Chart(canvas, {
-    type: 'radar', // ✅ 반드시 타입 명시!
+    type: 'radar', 
     data: {
       labels: [
         '동',
@@ -458,3 +476,7 @@ function radar_chart() {
     }
   });
 }
+
+
+
+

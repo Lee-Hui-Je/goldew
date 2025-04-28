@@ -496,6 +496,7 @@ body {
   position: relative;
   opacity: 1;
   transition-delay: 0.1s;
+  cursor: pointer;
 }
 
 .fav_box .fav_x{

@@ -7,6 +7,22 @@ const input = document.getElementById('chat-input');
 let type = menu.getAttribute('data-type');
 let chat_bool = false;
 
+
+console.log("▶ trust.js 로드됨, localStorage.user_id:", localStorage.getItem("user_id"));
+window.addEventListener("DOMContentLoaded", () => {
+  const userId = localStorage.getItem("user_id");
+  console.log(" user_id 상태:", userId);
+
+  if (!userId) {
+    alert("로그인을 해주세요!");
+    sessionStorage.setItem("showLoginModal", "true");
+    window.location.href = "/template/html/index.html";
+    return;
+  }
+
+});
+
+
 ro_btn.addEventListener("click", () => {
   text_box.style.opacity = "0";
   ro_btn.style.opacity = "0";

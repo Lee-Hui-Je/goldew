@@ -9,8 +9,7 @@ from controller import pgsql_test
 from fastapi.responses import FileResponse
 import bcrypt
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
-from controller.authen import create_access_token, SECRET_KEY, ALGORITHM
+from starlette.middleware.sessions import SessionMiddleware
 from pydantic import BaseModel
 from openai import OpenAI
 from langchain_openai import ChatOpenAI
@@ -18,6 +17,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from fastapi.responses import StreamingResponse
 from .pdf_parser import extract_text_from_pdf
 from .risk import analyze_register_with_user_input, generate_summary_and_actions
+
 app = FastAPI()
 
 # 라우터
@@ -32,14 +32,34 @@ origins = [
 ]
 app.add_middleware(
     CORSMiddleware,
-     allow_origins=["http://127.0.0.1:5500"],  # 또는 ["*"]
+    allow_origins=[
+        "http://localhost:5500",
+        "http://127.0.0.1:5500"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"]
 )
 
+load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
+app.add_middleware(
+    SessionMiddleware,
+    secret_key=os.getenv("SESSION_SECRET_KEY"),
+    same_site="lax",      
+    https_only=False       
+)
+
+
+
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+# 로그인된 사용자 가져오기
+def hows_user(request: Request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        raise HTTPException(status_code=401, detail="로그인이 필요합니다.")
+    return user_id
 
 # 회원가입
 @app.post("/join")
@@ -56,50 +76,53 @@ async def join(
 
 # 로그인
 @app.post("/login")
-async def login(id: str = Form(...), pw: str = Form(...)):
+async def login(request: Request, id: str = Form(...), pw: str = Form(...)):
+    request.session.clear()
     user = pgsql_test.get_user_id(id)
     if user is None:
         raise HTTPException(status_code=401, detail="존재하지 않는 아이디입니다.")
-    hashed_pw = user['pw']
-    
-    if bcrypt.checkpw(pw.encode('utf-8'), hashed_pw.encode('utf-8')):
-        token = create_access_token(data={"sub": id})
-        return {"access_token": token, "token_type": "bearer" ,"user_id" : id}
-    else:
+
+    if not bcrypt.checkpw(pw.encode('utf-8'), user['pw'].encode('utf-8')):
         raise HTTPException(status_code=401, detail="비밀번호가 틀렸습니다.")
 
+    request.session['user_id'] = id
+    print(f"세션 저장 완료: {request.session['user_id']}")  
+    return {"message": "로그인 성공", "user_id": id}
 
-# JWT 토큰 검증
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")  
 
-def verify_token(token: str = Depends(oauth2_scheme)):
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_id = payload.get("sub")
-        if user_id is None:
-            raise HTTPException(status_code=401, detail="유효하지 않은 토큰입니다.")
-        return user_id
-    except JWTError:
-        raise HTTPException(status_code=401, detail="토큰 검증 실패")
-
-@app.get("/my-page")
-def my_page(user_id: str = Depends(verify_token)):
-    return {"message": f"{user_id}님 환영합니다!"}
 
 # 회원 정보 수정 
 @app.post("/edit")
 async def edit(
-    id: str = Form(...),
+    request: Request,
     pw: str = Form(...),
     phone: str = Form(...),
     email: str = Form(...)
 ):
+    user_id = request.session.get('user_id')
+    print(user_id)
+    if not user_id:
+        raise HTTPException(status_code=401, detail="로그인이 필요합니다.")
+
     hashed_pw = hash_password(pw)
-    success = pgsql_test.update_mem(id, hashed_pw, phone, email)
+    success = pgsql_test.update_mem(user_id, hashed_pw, phone, email)
     if success:
         return {"message": "수정 성공"}
     else:
         raise HTTPException(status_code=500, detail="수정 실패")
+@app.post("/logout")
+async def logout(request: Request):
+    request.session.clear()
+    response = JSONResponse(content={"message": "로그아웃 성공"})
+    response.delete_cookie("session") 
+    return response
+
+@app.get("/userinfo")
+async def userinfo(request: Request):
+    user_id = request.session.get('user_id')
+    if not user_id:
+        raise HTTPException(status_code=401, detail="로그인이 필요합니다.")
+    return {"user_id": user_id}
 
 @app.post("/trust-check")
 async def trust_check(
@@ -144,7 +167,6 @@ async def trust_check(
 
     return JSONResponse(content=result)
 
-load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # 1. 모델 설정

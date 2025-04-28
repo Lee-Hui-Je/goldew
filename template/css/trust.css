@@ -538,4 +538,108 @@ body {
     font-weight: 600;
   }
   
- 
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .modal-box {
+    width: 1080px;
+    height: 600px;
+    background: white;
+    margin: 4% auto;
+    display: flex;
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 30px rgba(0,0,0,0.3);
+  }
+  
+  .modal-left {
+    flex: 1;
+    background: url("../assets/hows_logo.png") no-repeat center center;
+    background-size: 50%;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+  }
+  
+  
+  .modal-left a {
+    color: #686363;
+    text-decoration: underline;
+    font-size: 0.9em;
+  }
+  
+  .modal-right {
+    flex: 1;
+    background-color: #eceef0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  
+  .login-form {
+    background-color: white;
+    padding: 60px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  
+  .login-form h2 {
+    margin-bottom: 30px;
+    font-size: 2em;
+    text-align: center;
+  }
+  
+  .login-form input[type="text"],
+  .login-form input[type="password"] {
+    width: 100%;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .login-form .forgot {
+    text-align: right;
+    font-size: 0.9em;
+    margin-bottom: 14px;
+    color: #696565;
+  }
+  
+  .login-form input[type="submit"] {
+    width: 50%;
+    background-color: #6363DD;
+    color: white;
+    padding: 14px;
+    font-size: 1em;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 25px auto 0 auto
+  }
+  .login-form input[type="submit"]:hover {
+    background-color: #d4d4d4;
+  }
+  .close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 28px;
+    color: #333;
+    cursor: pointer;
+  }
+  

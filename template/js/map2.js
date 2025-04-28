@@ -26,3 +26,5 @@ fav_x_box.addEventListener('click',(e) => {
     });
     fav_x.style.display = "none";
 })
+
+
