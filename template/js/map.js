@@ -1,4 +1,4 @@
-// 개선된 전체 코드 (클러스터링 및 배치 로딩 포함)
+import { fetchFavList } from './map2.js';
 
 const markers = []; // 마커 저장 배열
 const chartInstances = {};
@@ -26,6 +26,14 @@ const house_date = document.querySelector(".house_date").children
 const level_box = document.querySelector(".level_box")
 const mistake_prices = document.querySelector(".mistake_prices").children
 
+
+document.addEventListener("DOMContentLoaded", async () => {
+  Mtoolbar.classList.add('toact');
+  await fetchFavList();
+  await loadHouseKind(house_kind);
+});
+
+
 // 바뀌는 값
 let house_kind = "opi" //집 종류
 
@@ -43,9 +51,6 @@ oneroom.addEventListener("click", ()=>{
   loadHouseKind(house_kind)
 })
 
-window.onload = function() {
-  Mtoolbar.classList.add('toact');
-};
 
 const map = new naver.maps.Map('map', {
   center: new naver.maps.LatLng(35.1595, 126.8526),
@@ -140,8 +145,8 @@ function createMarker(data) {
             Ipanel.style.visibility = "visible";
           }, 150);
           house_imfo_box(data.property_id, house_kind)
+          fetchFavList()
         });
-
         resolve();
       }
     );
@@ -209,7 +214,6 @@ async function loadHouseKind(house_kind){
   }
 };
 
-window.onload = loadHouseKind(house_kind);
 
 async function house_imfo_box(id, house_kind) {
   try {
@@ -222,6 +226,7 @@ async function house_imfo_box(id, house_kind) {
     });
 
     const data = await res.json();
+    globalMarkerData = data;
     let risk_text;
     let position_color;
 
@@ -271,6 +276,11 @@ async function house_imfo_box(id, house_kind) {
     canvas_chart(uuid, data.property_id, data.risk_level);
     radar_chart(data.dong_score, data.area_score,data.log_building_age,data.room_score,data.direction_score,data.floor_score,data.insurance_score);
 
+    // opa_op.addEventListener('click',(e)=>{
+    //   favInsert("cha",data.address,data.jeonse_price,data.estimated_jeonse_price,data.risk_level,data.property_id,"원룸")
+    // })
+    // opa_op.removeEventListener("click",)
+
   } catch (error) {
       console.error("실패:", error);
   }
@@ -284,10 +294,26 @@ function uuidv4() {
   });
 }
 
-function fav_click(){
-  opa_op.addEventListener('click',()=>{
+let globalMarkerData = undefined;
+opa_op.addEventListener('click',(e)=>{
+  favInsert("cha",
+    globalMarkerData.address,
+    globalMarkerData.jeonse_price,
+    globalMarkerData.estimated_jeonse_price,
+    globalMarkerData.risk_level,
+    globalMarkerData.property_id,"원룸")
+});
 
-  })
+async function favInsert(user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type) {
+  try {
+    const res = await fetch("http://localhost:8000/insert_fav", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type})
+    });
+  } catch (error) {
+    console.error("실패", error);
+  }
 }
 
 function canvas_chart(uuid, id, level){
