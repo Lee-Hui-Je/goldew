@@ -286,7 +286,7 @@ function uuidv4() {
 
 function fav_click(){
   opa_op.addEventListener('click',()=>{
-    
+
   })
 }
 
