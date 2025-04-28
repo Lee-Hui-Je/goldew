@@ -18,7 +18,6 @@ def map_opi():
             cur.execute("SELECT * FROM public.tb_property")
             user = cur.fetchall()
             return user
-
         except psycopg.OperationalError as err:
             print(err)
         except psycopg.ProgrammingError as err:
@@ -162,7 +161,6 @@ def insert_fav(user_id,address,jeonse_price,estimated_jeonse_price,risk_level,pr
 def fav_list(user_id):
     with pool_default.connection() as conn:
         cur = conn.cursor(row_factory=psycopg.rows.dict_row)
-
         try:
             results = cur.execute("SELECT * FROM public.tb_property_fav where user_id = %s;",(user_id,)).fetchall()
         except psycopg.OperationalError as err:
