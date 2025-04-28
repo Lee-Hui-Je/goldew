@@ -138,3 +138,41 @@ def house_oneroom(id):
         finally:
             cur.close()
 
+# 즐겨찾기 추가
+def insert_fav(user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type):
+    with pool_default.connection() as conn:
+        cur = conn.cursor(row_factory=psycopg.rows.dict_row)
+
+        try:
+            cur.execute("INSERT INTO tb_property_fav (user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type) VALUES (%s,%s,%s,%s,%s,%s,%s);", (user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type))
+        except psycopg.OperationalError as err:
+            print(err)
+        except psycopg.ProgrammingError as err:
+            print(err)
+        except psycopg.InternalError as err:
+            print(err)
+        except Exception as err:
+            print(err) 
+            return False
+        finally:
+            cur.close()
+    return True
+
+# 즐겨찾기 조회
+def fav_list(user_id):
+    with pool_default.connection() as conn:
+        cur = conn.cursor(row_factory=psycopg.rows.dict_row)
+
+        try:
+            results = cur.execute("SELECT * FROM public.tb_property_fav where user_id = %s;",(user_id,)).fetchall()
+        except psycopg.OperationalError as err:
+            print(err)
+        except psycopg.ProgrammingError as err:
+            print(err)
+            results = False
+        except psycopg.InternalError as err:
+            print(err)
+            results = False
+        finally:
+            cur.close()
+    return results

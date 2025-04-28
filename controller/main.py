@@ -237,5 +237,14 @@ async def chat(request: Request, ty: ChatInput):
         - 대화는 반드시 한국어로 진행
         - "좋습니다!"라는 문장 대신 "시뮬레이션을 시작할게요! 🏠"로 시작 """
         }] + history
+    
+    async def token_stream():
+        async for chunk in chat_llm.astream(messages):
+            if chunk.content:
+                yield chunk.content
+        # 응답 완료 후 AI 응답을 히스토리에 저장 (전체 content는 따로 누적하거나 reconstruct 해야 함)
+        history.append(chunk)
+
+    return StreamingResponse(token_stream(), media_type="text/plain")
 
    

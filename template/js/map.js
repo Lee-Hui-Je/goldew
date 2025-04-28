@@ -1,4 +1,4 @@
-// 개선된 전체 코드 (클러스터링 및 배치 로딩 포함)
+import { fetchFavList } from './map2.js';
 
 const markers = []; // 마커 저장 배열
 const chartInstances = {};
@@ -12,6 +12,9 @@ const back = document.querySelector(".back-box .back")
 const opi = document.querySelector(".opi")
 const villa = document.querySelector(".villa")
 const  oneroom= document.querySelector(".oneroom")
+const  opa_op= document.querySelector(".opa-op")
+let globalMarkerData = undefined;
+const userId = localStorage.getItem("user_id");
 
 // 집 상세 정보 첫번째 박스
 const imfo_price = document.querySelector(".imfo_price")
@@ -24,6 +27,14 @@ const house_date = document.querySelector(".house_date").children
 // 집 상세 오차율 박스
 const level_box = document.querySelector(".level_box")
 const mistake_prices = document.querySelector(".mistake_prices").children
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  Mtoolbar.classList.add('toact');
+  fetchFavList()
+  await loadHouseKind(house_kind);
+});
+
 
 // 바뀌는 값
 let house_kind = "opi" //집 종류
@@ -42,9 +53,6 @@ oneroom.addEventListener("click", ()=>{
   loadHouseKind(house_kind)
 })
 
-window.onload = function() {
-  Mtoolbar.classList.add('toact');
-};
 
 const map = new naver.maps.Map('map', {
   center: new naver.maps.LatLng(35.1595, 126.8526),
@@ -140,7 +148,6 @@ function createMarker(data) {
           }, 150);
           house_imfo_box(data.property_id, house_kind)
         });
-
         resolve();
       }
     );
@@ -173,21 +180,6 @@ window.addEventListener("DOMContentLoaded", () => {
       if (query) searchAddress(query);
     }
   });
-  const favBtn = document.querySelector('.opa-op');
-  if (favBtn) {
-    favBtn.addEventListener('click', () => {
-      const currentBg = getComputedStyle(favBtn).backgroundImage;
-
-      if (!currentHouseData) return;
-
-      if (currentBg.includes("love1.png")) {
-        favBtn.style.backgroundImage = 'url("../../assets/love.png")';
-        favInsert("cha", currentHouseData.address, currentHouseData.jeonse_price, currentHouseData.estimated_jeonse_price, currentHouseData.risk_level);
-      } else {
-        favBtn.style.backgroundImage = 'url("../../assets/love1.png")';
-      }
-    });
-  }
 });
 
 function searchAddress(query) {
@@ -223,7 +215,6 @@ async function loadHouseKind(house_kind){
   }
 };
 
-window.onload = loadHouseKind(house_kind);
 
 async function house_imfo_box(id, house_kind) {
   try {
@@ -236,6 +227,7 @@ async function house_imfo_box(id, house_kind) {
     });
 
     const data = await res.json();
+    globalMarkerData = data;
     let risk_text;
     let position_color;
 
@@ -285,7 +277,10 @@ async function house_imfo_box(id, house_kind) {
     canvas_chart(uuid, data.property_id, data.risk_level);
     radar_chart(data.dong_score, data.area_score,data.log_building_age,data.room_score,data.direction_score,data.floor_score,data.insurance_score);
 
-    currentHouseData = data;
+    // opa_op.addEventListener('click',(e)=>{
+    //   favInsert("cha",data.address,data.jeonse_price,data.estimated_jeonse_price,data.risk_level,data.property_id,"원룸")
+    // })
+    // opa_op.removeEventListener("click",)
 
   } catch (error) {
       console.error("실패:", error);
@@ -300,10 +295,16 @@ function uuidv4() {
   });
 }
 
-function fav_click(){
-  opa_op.addEventListener('click',()=>{
-
-  })
+async function favInsert(user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type) {
+  try {
+    const res = await fetch("http://localhost:8000/insert_fav", {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type})
+    });
+  } catch (error) {
+    console.error("실패", error);
+  }
 }
 
 function canvas_chart(uuid, id, level){
@@ -439,8 +440,14 @@ function radar_chart(dong_score, area_score,log_building_age,room_score,directio
   const canvas = document.querySelector("#radar_chart");
   if (!canvas) return;
 
-  new Chart(canvas, {
-    type: 'radar', // ✅ 반드시 타입 명시!
+  const id = 'radar_chart';
+
+  if (randarChartInstances[id]){
+    randarChartInstances[id].destroy();
+  }
+
+  randarChartInstances[id] = new Chart(canvas, {
+    type: 'radar',
     data: {
       labels: [
         '동',
@@ -482,6 +489,18 @@ function radar_chart(dong_score, area_score,log_building_age,room_score,directio
   });
 }
 
-
-
-
+opa_op.onclick = () =>{
+  fetchFavList();
+  if(!userId){
+    alert("로그인 후 사용가능한 기능입니다.")
+  }
+  favInsert(
+    userId,
+    globalMarkerData.address,
+    globalMarkerData.jeonse_price,
+    globalMarkerData.estimated_jeonse_price,
+    globalMarkerData.risk_level,
+    globalMarkerData.property_id,
+    house_kind
+  )
+};

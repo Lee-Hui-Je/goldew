@@ -8,7 +8,7 @@ let type = menu.getAttribute('data-type');
 let chat_bool = false;
 
 
-console.log("▶ trust.js 로드됨, localStorage.user_id:", localStorage.getItem("user_id"));
+
 window.addEventListener("DOMContentLoaded", () => {
   const userId = localStorage.getItem("user_id");
   console.log(" user_id 상태:", userId);
@@ -140,7 +140,7 @@ async function fetchGPT() {
   try {
     const lastUserMessage = messageHistory[messageHistory.length - 1]?.content || "";
 
-    const res = await fetch('http://34.132.18.41:8000/chat', {
+    const res = await fetch('http://localhost:8000/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input: lastUserMessage, type:type ,chat_bool:chat_bool})
