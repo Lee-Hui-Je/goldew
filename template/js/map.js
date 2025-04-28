@@ -2,6 +2,7 @@
 
 const markers = []; // 마커 저장 배열
 const chartInstances = {};
+const randarChartInstances = {};
 const zoomThreshold = 13;
 const MHeader = document.querySelector(".main-header")
 const logo = document.querySelector(".logo")
@@ -11,6 +12,7 @@ const back = document.querySelector(".back-box .back")
 const opi = document.querySelector(".opi")
 const villa = document.querySelector(".villa")
 const  oneroom= document.querySelector(".oneroom")
+const  opa_op= document.querySelector(".opa-op")
 
 // 집 상세 정보 첫번째 박스
 const imfo_price = document.querySelector(".imfo_price")
@@ -267,8 +269,7 @@ async function house_imfo_box(id, house_kind) {
     mistake_prices[2].textContent = `추정가 ${data.estimated_jeonse_price}`
 
     canvas_chart(uuid, data.property_id, data.risk_level);
-
-    radar_chart();
+    radar_chart(data.dong_score, data.area_score,data.log_building_age,data.room_score,data.direction_score,data.floor_score,data.insurance_score);
 
   } catch (error) {
       console.error("실패:", error);
@@ -281,6 +282,12 @@ function uuidv4() {
     const v = c === 'x' ? r : (r & 0x3 | 0x8);
     return v.toString(16);
   });
+}
+
+function fav_click(){
+  opa_op.addEventListener('click',()=>{
+    
+  })
 }
 
 function canvas_chart(uuid, id, level){
@@ -412,12 +419,18 @@ function gara_chart(id, level){
   });
 }
 
-function radar_chart() {
+function radar_chart(dong_score, area_score,log_building_age,room_score,direction_score,floor_score,insurance_score) {
   const canvas = document.querySelector("#radar_chart");
   if (!canvas) return;
 
-  new Chart(canvas, {
-    type: 'radar', // ✅ 반드시 타입 명시!
+  const id = 'radar_chart';
+
+  if (randarChartInstances[id]){
+    randarChartInstances[id].destroy();
+  }
+
+  randarChartInstances[id] = new Chart(canvas, {
+    type: 'radar',
     data: {
       labels: [
         '동',
@@ -430,7 +443,7 @@ function radar_chart() {
       ],
       datasets: [{
         label: 'My First Dataset',
-        data: [65, 59, 90, 81, 56, 55, 40],
+        data: [dong_score, area_score,log_building_age,room_score,direction_score,floor_score,insurance_score],
         fill: true,
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
         borderColor: 'rgb(255, 99, 132)',
