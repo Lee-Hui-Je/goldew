@@ -246,7 +246,7 @@ document.getElementById("arrow-right").addEventListener("click", () => {
 
 
 async function fetchGptSummaryStream(reasonText) {
-  const response = await fetch("http://127.0.0.1:8000/reportsummary", {
+  const response = await fetch("http://34.60.210.75:8000/reportsummary", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -437,7 +437,7 @@ document.getElementById("start-check-btn").addEventListener("click", async () =>
   const waitAtLeast4Sec = new Promise(res => setTimeout(res, 4000));
 
   try {
-    const fetchReport = fetch("http://127.0.0.1:8000/trust-check", {
+    const fetchReport = fetch("http://34.60.210.75:8000/trust-check", {
       method: "POST",
       body: formData
     })

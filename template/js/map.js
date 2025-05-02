@@ -34,7 +34,7 @@ const mistake_prices = document.querySelector(".mistake_prices").children
 document.addEventListener("DOMContentLoaded", async () => {
   Mtoolbar.classList.add('toact');
   if(userId){
-    await fetchFavList();
+    await fetchFavList(userId);
   }
   // 즐겨찾기 매물 이동 및 선택
   bindFavListEvents();
@@ -234,7 +234,7 @@ async function loadHouseKind(house_kind){
     markers.length = 0;  // 마커 배열 비우기
     markerData.length = 0;  // 데이터 배열 비우기
 
-    const response = await fetch(`http://localhost:8000/${house_kind}`);
+    const response = await fetch(`http://34.60.210.75:8000/${house_kind}`);
     const data = await response.json();
     markerData.push(...data);
     await createMarkersInBatch(markerData);
@@ -317,7 +317,7 @@ async function fetchStreamPrompt(url, prompt, containerId) {
 
 async function house_imfo_box(id, house_kind) {
   try {
-    const res = await fetch(`http://localhost:8000/house_${house_kind}`, {
+    const res = await fetch(`http://34.60.210.75:8000/house_${house_kind}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -426,7 +426,7 @@ async function house_imfo_box(id, house_kind) {
 
     // 7) 스트리밍 호출
     fetchStreamPrompt(
-      "http://localhost:8000/mapsummary",
+      "http://34.60.210.75:8000/mapsummary",
       prompt,
       "dchart_text"
     );
@@ -448,7 +448,7 @@ function uuidv4() {
 
 async function favInsert(user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type) {
   try {
-    const res = await fetch("http://localhost:8000/insert_fav", {
+    const res = await fetch("http://34.60.210.75:8000/insert_fav", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type})
@@ -460,7 +460,7 @@ async function favInsert(user_id,address,jeonse_price,estimated_jeonse_price,ris
 
 async function favDelete(user_id,property_id) {
   try {
-    const res = await fetch("http://localhost:8000/delete_fav", {
+    const res = await fetch("http://34.60.210.75:8000/delete_fav", {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id,property_id})
@@ -677,19 +677,21 @@ opa_op.onclick = async() =>{
     await favDelete(userId, globalMarkerData.property_id)
   }
   if(userId){
-    await fetchFavList();
+    await fetchFavList(userId);
   }
   await updateFavoriteIcon();
   bindFavListEvents();
 };
 
 // 좋아요 리스트
-async function fetchFavList() {
+async function fetchFavList(user_id) {
   try {
       fav_box_ul.innerHTML = "";
-      const response = await fetch("http://localhost:8000/fav_list",{
-          method:"GET",
-          credentials:"include"
+      const response = await fetch("http://34.60.210.75:8000/fav_list",{
+          method:"POST",
+          headers: {"Content-Type": "application/json"},
+          credentials:"include",
+          body: JSON.stringify(user_id),
       });
       const data = await response.json();
       data.forEach(item => {
@@ -745,7 +747,7 @@ async function fetchFavList() {
 
 async function fav_li_click(index) {
   try {
-    const res = await fetch("http://localhost:8000/fav_list", {
+    const res = await fetch("http://34.60.210.75:8000/fav_list", {
       credentials: "include"
     });
     const dataList = await res.json();  // 즐겨찾기 리스트 가져오기

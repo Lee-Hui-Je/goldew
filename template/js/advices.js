@@ -140,7 +140,7 @@ async function fetchGPT() {
   try {
     const lastUserMessage = messageHistory[messageHistory.length - 1]?.content || "";
 
-    const res = await fetch('http://localhost:8000/chat', {
+    const res = await fetch('http://34.60.210.75:8000/chat', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input: lastUserMessage, type:type ,chat_bool:chat_bool})

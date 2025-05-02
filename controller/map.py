@@ -52,9 +52,9 @@ async def insert_fav(data: dict):
     results = pgsql_map.insert_fav(user_id, address, jeonse_price, estimated_jeonse_price, risk_level,property_id,room_type)
     return {"success": True}
 
-@router.get("/fav_list")
-def fav_list(request: Request):
-    user_id = request.session.get('user_id')
+@router.post("/fav_list")
+def fav_list(data: dict):
+    user_id = data['user_id']
     print(user_id)
     results = pgsql_map.fav_list(user_id)
     return results

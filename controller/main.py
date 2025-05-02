@@ -46,7 +46,7 @@ load_dotenv(dotenv_path=Path(__file__).resolve().parent / ".env")
 app.add_middleware(
     SessionMiddleware,
     secret_key=os.getenv("SESSION_SECRET_KEY"),
-    same_site="lax",      
+    same_site="none",      
     https_only=False       
 )
 

@@ -78,7 +78,7 @@ async function handleJoinSubmit(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://localhost:8000/join", {
+    const res = await fetch("http://34.60.210.75:8000/join", {
       method: "POST",
       body: formData,
       credentials: "include" 
@@ -110,7 +110,7 @@ window.handleLogin = async function(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://localhost:8000/login", {
+    const res = await fetch("http://34.60.210.75:8000/login", {
       method: "POST",
       body: formData,
       credentials: "include" 
@@ -140,7 +140,7 @@ window.handleLogin = async function(event) {
 document.querySelector(".logout-link").addEventListener("click", async (e) => {
   e.preventDefault();
 
-  await fetch("http://localhost:8000/logout", {
+  await fetch("http://34.60.210.75:8000/logout", {
     method: "POST",
     credentials: "include" 
   });
@@ -178,7 +178,7 @@ async function handleeditSubmit(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://localhost:8000/edit", {
+    const res = await fetch("http://34.60.210.75:8000/edit", {
       method: "POST",
       body: formData,
       credentials: "include" 
@@ -206,7 +206,7 @@ document.querySelector(".edit-link").addEventListener("click", async (e) => {
   e.preventDefault();
 
   try {
-    const res = await fetch("http://localhost:8000/userinfo", {
+    const res = await fetch("http://34.60.210.75:8000/userinfo", {
       method: "GET",
       credentials: "include"
     });
@@ -311,7 +311,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 (async () => {
   try {
-    const response = await fetch("http://localhost:8000/naver-news?query=전세사기&display=100");
+    const response = await fetch("http://34.60.210.75:8000/naver-news?query=전세사기&display=100");
     const data = await response.json();
 
     data.items.forEach(item => {
