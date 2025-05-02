@@ -32,30 +32,3 @@ fav_x_box.addEventListener('click',(e) => {
     fav_x.style.display = "none";
 })
 
-export async function fetchFavList() {
-    try {
-        fav_box_ul.innerHTML = "";
-        const response = await fetch("http://localhost:8000/fav_list",{
-            method:"GET",
-            credentials:"include"
-        });
-        const data = await response.json();
-
-        data.forEach(item => {
-            const li = document.createElement("li");
-            li.innerHTML = `
-                <div class="fav_risk">
-                    <div class="fav_risk_item"></div>
-                    <div>
-                        <p>${item.jeonse_price}</p>
-                        <p>${item.estimated_jeonse_price}</p>
-                    </div>
-                </div>
-                <div class='fav_address'>${item.address}</div>
-            `;
-            fav_box_ul.appendChild(li);
-        });
-    } catch (error) {
-        console.error("데이터 가져오기 실패:", error);
-    }
-}

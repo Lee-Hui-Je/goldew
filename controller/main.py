@@ -17,6 +17,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from fastapi.responses import StreamingResponse
 from .pdf_parser import extract_text_from_pdf
 from .risk import analyze_register_with_user_input, generate_summary_and_actions
+import requests
 
 app = FastAPI()
 
@@ -210,41 +211,90 @@ async def chat(request: Request, ty: ChatInput):
     user_input = data.get("input", "")
     # 대화 히스토리 갱신
     history.append({"role": "user", "content": user_input})
-    # system + 이전 대화 + 현재 입력 합치기
+    scenario = {
+        "깡통전세": "전세 보증금이 매매가보다 높고, 근저당이나 압류가 잡혀 있어 세입자가 보증금을 돌려받지 못할 위험이 있는 상황을 구성하라.",
+        "위조계약": "등기부등본상 집주인이 아닌 사람이 가짜 서류로 계약을 진행하는 상황을 구성하라.",
+        "이중계약": "같은 집에 두 명 이상의 세입자와 계약을 진행하고 있는 상황을 구성하라.",
+        "명의신탁": "실소유주가 아닌 명의자(예: 지인 이름)로 등기된 주택을 계약하는 상황을 구성하라.",
+        "보증보험 악용": "보증보험 가입을 미끼로 안전하다고 속이며 실제로는 보험가입 요건이 안 되거나 허위로 신청한 상황을 구성하라.",
+        "분양형 사기": "실제로는 허가가 안 난 건물이나 가짜 분양권으로 계약을 유도하는 상황을 구성하라.",
+        "위장 임대인": "임차인이 집주인인 척하고, 원래 소유자의 모르게 전세 계약을 체결하는 상황을 구성하라.",
+        "전세권 미설정": "전세권 설정을 하지 않고 단순 임차로 계약을 유도하면서, 후순위 보증금 보호가 안 되는 상황을 구성하라.",
+    }
+    scenario_text= scenario.get(ty.type, "해당 사기유형에 맞게 위험한 상황을 구상하라")
     messages = [{"role": "system", "content": 
         f"""
-        지금부터 너는 사용자와 함께 **대화형 전세사기 예방 시뮬레이션**을 진행할 거야.
-        전세사기 종류는 {ty.type}이야.
+지금부터 너는 사용자와 함께 **대화형 전세사기 예방 시뮬레이션**을 진행할 거야.
+전세사기 종류는 {ty.type}이야.
+[사기 시나리오 설정]
+- {scenario_text}
+[상황]
+- 너는 실제 부동산 계약 현장에서 사용자를 맞이한 중개인이자 임대인의 대리인이야.
+- 사용자는 매물을 보러 온 예비 세입자야.
+- 현실적인 말투와 자연스러운 대화 흐름을 유지하라.
 
-        너는 지금부터 전세 계약 현장에 있는 부동산 중개인이자 임대인의 역할을 맡게 된다.
-        사용자와 실제 계약처럼 대화하며, 사기 여부를 가정하거나 확인하고 조언을 제공해야 한다.
+[역할과 말투]
+- 너는 처음부터 친절하고 적극적인 중개인의 말투로 시작해야 해.
+- 처음 대화는 **인사 없이** 바로 매물 정보 소개로 시작해.  
+  예) "지금 보시는 방은 역세권 5분 거리에 있는 신축 원룸이에요. 햇빛 잘 들고 관리비도 저렴해서 인기가 많아요."
+- 이후 사용자의 반응에 따라 임대인, 사기방지도우미의 역할도 자연스럽게 오가며 대화하라.
 
-        [역할]
-        - 너는 한 명의 부동산 중개인이며, 동시에 임대인의 대리 역할도 겸한다.
-        - 상황에 따라 중개인/임대인/사기방지도우미 역할을 전환하며 연기한다.
-        - 사용자는 전세방을 보러 온 예비 세입자다.
+[진행 방식]
+- 사용자의 발언을 듣고, 사기 징후가 있으면 바로 경고해.
+- 사기를 피한 발언엔 칭찬과 실전 팁을 알려줘.
+- 부동산 용어는 등장할 때마다 반드시 쉬운 설명을 추가해줘.
 
-        [진행 방식]
-        - 대화는 자연스럽게 계약을 유도하거나 사용자의 반응에 따라 사기 상황을 판단한다.
-        - 첫 응답에서는 중개인의 입장에서 매물을 소개하며 말문을 연다.
-        - 사용자의 답변이 나오면 그에 대해 긍정/위험 피드백을 제공하라.
-        - 자유 응답을 받으며, 선택지를 제시하지 않는다.
-
-        [주의사항]
-        - 잘못된 선택 → 즉시 위험 경고와 이유 설명
-        - 좋은 선택 → 긍정 피드백 + 실전 꿀팁 추가
-        - 부동산 용어가 나오면 꼭 쉬운 설명을 함께 제시
-        - 대화는 반드시 한국어로 진행
-        - "좋습니다!"라는 문장 대신 "시뮬레이션을 시작할게요! 🏠"로 시작 """
-        }] + history
+[주의사항]
+- 선택지를 제시하지 마. 자유롭게 대화를 이어가.
+- 사기유형은 '{ty.type}'에 기반하여 상황을 만들어.
+- 대화는 반드시 한국어로만 진행해.
+"""
+}] + history
     
     async def token_stream():
+        full_response = ""
         async for chunk in chat_llm.astream(messages):
-            if chunk.content:
-                yield chunk.content
-        # 응답 완료 후 AI 응답을 히스토리에 저장 (전체 content는 따로 누적하거나 reconstruct 해야 함)
-        history.append(chunk)
+         if chunk.content:
+            full_response += chunk.content
+            yield chunk.content
+        history.append({"role": "assistant", "content": full_response})
 
     return StreamingResponse(token_stream(), media_type="text/plain")
 
    
+@app.post("/mapsummary")
+async def mapsummary(request: Request):
+    data = await request.json()
+    prompt = data.get("prompt", "")
+    client = OpenAI()
+
+    def generate():
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "지도 매물 요약을 형식에 맞게 작성해주세요."},
+                {"role": "user", "content": prompt}
+            ],
+            stream=True,
+        )
+        for chunk in response:
+            delta = chunk.choices[0].delta
+            if hasattr(delta, "content") and delta.content:
+                yield delta.content
+
+    return StreamingResponse(generate(), media_type="text/plain")
+
+@app.get("/naver-news")
+def get_naver_news(query: str = "부동산"):
+    url = "https://openapi.naver.com/v1/search/news.json"
+    headers = {
+        "X-Naver-Client-Id": "kkKsLuX2h62tf_CLjh2n",
+        "X-Naver-Client-Secret": "W1z2_3i06q"
+    }
+    params = {
+        "query": query,
+        "display": 100,
+        "sort": "date"
+    }
+    response = requests.get(url, headers=headers, params=params)
+    return response.json()

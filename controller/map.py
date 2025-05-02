@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request
+from fastapi import HTTPException, APIRouter, Request
 from controller import pgsql_map
 router = APIRouter()
 
@@ -55,5 +55,17 @@ async def insert_fav(data: dict):
 @router.get("/fav_list")
 def fav_list(request: Request):
     user_id = request.session.get('user_id')
+    print(user_id)
     results = pgsql_map.fav_list(user_id)
     return results
+
+@router.post("/delete_fav")
+async def delete_fav_endpoint(data: dict):
+    user_id = data['user_id']
+    property_id = data['property_id']
+    result = pgsql_map.delete_fav(user_id, property_id)
+    
+    if result:
+        return {"success": True}
+    else:
+        return {"success": False, "error": "삭제 실패"}

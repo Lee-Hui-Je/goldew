@@ -10,7 +10,7 @@ let chat_bool = false;
 
 
 window.addEventListener("DOMContentLoaded", () => {
-  const userId = localStorage.getItem("user_id");
+  const userId = sessionStorage.getItem("user_id");
   console.log(" user_id 상태:", userId);
 
   if (!userId) {

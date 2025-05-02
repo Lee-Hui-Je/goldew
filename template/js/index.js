@@ -1,7 +1,10 @@
 const slides = document.querySelectorAll(".about-slide");
 const prevBtn = document.querySelector(".prev");
 const nextBtn = document.querySelector(".next");
+const newsContainer = document.getElementById("news-container");
 let currentIndex = 0;
+
+const news = [];
 
 function showSlide(index) {
   slides.forEach((slide, i) => {
@@ -118,7 +121,7 @@ window.handleLogin = async function(event) {
     if (res.ok) {
       // 로그인 성공
       const userId = data.user_id;
-      localStorage.setItem("user_id", userId);
+      sessionStorage.setItem("user_id", userId);
       document.getElementById("login-modal").style.display = "none";
       document.querySelector(".auth-top").style.display = "none";
       document.querySelector(".auth-top-loggedin").style.display = "flex";
@@ -142,10 +145,10 @@ document.querySelector(".logout-link").addEventListener("click", async (e) => {
     credentials: "include" 
   });
  
-  localStorage.removeItem("user_id");
-  console.log("🗑 로그아웃 후 localStorage.user_id:", localStorage.getItem("user_id"));
+  sessionStorage.removeItem("user_id");
+  // console.log("🗑 로그아웃 후 localStorage.user_id:",sessionStorage.removeItem("user_id"));
   document.getElementById("login-form")?.reset();
-
+  
   alert("로그아웃 되었습니다!");
 
   document.querySelector(".auth-top").style.display = "flex";
@@ -153,7 +156,7 @@ document.querySelector(".logout-link").addEventListener("click", async (e) => {
 });
 
 window.addEventListener("DOMContentLoaded", () => {
-  const userId = localStorage.getItem("user_id");
+  const userId = sessionStorage.getItem("user_id");
   console.log("▶ user_id 상태:", userId);
    
     if (userId) {
@@ -304,3 +307,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+(async () => {
+  try {
+    const response = await fetch("http://localhost:8000/naver-news?query=전세사기&display=100");
+    const data = await response.json();
+
+    data.items.forEach(item => {
+      const title = item.title.replace(/<[^>]*>?/g, ''); // <b> 태그 제거
+      const description = item.description.replace(/<[^>]*>?/g, '').slice(0, 50); // <b> 태그 제거
+      newsContainer.innerHTML += `
+        <a href="${item.link}" target="_blank" class="swiper-slide">
+          <h4>${title}</h4>
+          <p>${description}...</p>
+        </a>
+      `;
+    });
+    new Swiper(".mySwiper", {
+      direction: "horizontal",
+      slidesPerView: 3, 
+      spaceBetween: 20, 
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      loop: true,
+    });
+
+  } catch (error) {
+    console.error("뉴스 불러오기 실패:", error);
+  }
+})();

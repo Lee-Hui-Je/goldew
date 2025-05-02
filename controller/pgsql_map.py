@@ -174,3 +174,23 @@ def fav_list(user_id):
         finally:
             cur.close()
     return results
+
+def delete_fav(user_id, property_id):
+    with pool_default.connection() as conn:
+        cur = conn.cursor(row_factory=psycopg.rows.dict_row)
+
+        try:
+            cur.execute(
+                "DELETE FROM tb_property_fav WHERE user_id = %s AND property_id = %s;",(user_id, property_id))
+        except psycopg.OperationalError as err:
+            print(err)
+        except psycopg.ProgrammingError as err:
+            print(err)
+        except psycopg.InternalError as err:
+            print(err)
+        except Exception as err:
+            print(err)
+            return False
+        finally:
+            cur.close()
+    return True
