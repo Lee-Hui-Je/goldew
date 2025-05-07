@@ -691,7 +691,7 @@ async function fetchFavList(user_id) {
           method:"POST",
           headers: {"Content-Type": "application/json"},
           credentials:"include",
-          body: JSON.stringify(user_id),
+          body: JSON.stringify({user_id}),
       });
       const data = await response.json();
       data.forEach(item => {
@@ -745,11 +745,14 @@ async function fetchFavList(user_id) {
   }
 }
 
-async function fav_li_click(index) {
+async function fav_li_click(user_id, index) {
   try {
-    const res = await fetch("http://34.60.210.75:8000/fav_list", {
-      credentials: "include"
-    });
+    const res = await fetch("http://34.60.210.75:8000/fav_list",{
+      method:"POST",
+      headers: {"Content-Type": "application/json"},
+      credentials:"include",
+      body: JSON.stringify({user_id}),
+  });
     const dataList = await res.json();  // 즐겨찾기 리스트 가져오기
 
     const data = dataList[index]; 
@@ -782,7 +785,7 @@ function bindFavListEvents() {
       console.log(house_kind)
       loadHouseKind(house_kind) // 매물종류이동
       if (query) searchAddress(query);
-      fav_li_click(index);
+      fav_li_click(userId, index);
     };
   });
 }
