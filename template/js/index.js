@@ -1,3 +1,7 @@
+import { config } from '../../config/env_config.js';
+const env = 'dev'
+const env_path = `http://${config[env].host}:${config[env].port}`
+
 const slides = document.querySelectorAll(".about-slide");
 const prevBtn = document.querySelector(".prev");
 const nextBtn = document.querySelector(".next");
@@ -60,25 +64,24 @@ goToJoinLink.addEventListener("click", (e) => {
   joinModal.style.display = "block";
 });
 
-function openModal(id) {
+window.openModal = function(id) {
   document.getElementById(id).style.display = 'flex';
-}
-
-function closeModal(e) {
+};
+window.closeModal = function(e) {
   if (e.target.className === 'modal' || e.target.className === 'modal-close') {
     document.querySelectorAll('.modal, .modal-scam').forEach(m => m.style.display = 'none');
   }
 }
 
 // 회원가입
-async function handleJoinSubmit(event) {
+window.handleJoinSubmit = async function(event)  {
   event.preventDefault();
 
   const form = event.target;
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://34.60.210.75:8000/join", {
+    const res = await fetch(`${env_path}/join`, {
       method: "POST",
       body: formData,
       credentials: "include" 
@@ -110,7 +113,7 @@ window.handleLogin = async function(event) {
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://34.60.210.75:8000/login", {
+    const res = await fetch(`${env_path}/login`, {
       method: "POST",
       body: formData,
       credentials: "include" 
@@ -140,7 +143,7 @@ window.handleLogin = async function(event) {
 document.querySelector(".logout-link").addEventListener("click", async (e) => {
   e.preventDefault();
 
-  await fetch("http://34.60.210.75:8000/logout", {
+  await fetch(`${env_path}/logout`, {
     method: "POST",
     credentials: "include" 
   });
@@ -171,14 +174,14 @@ window.addEventListener("DOMContentLoaded", () => {
 
 
 // 회원정보 수정
-async function handleeditSubmit(event) {
+window.handleeditSubmit = async function(event) {
   event.preventDefault();
 
   const form = event.target;
   const formData = new FormData(form);
 
   try {
-    const res = await fetch("http://34.60.210.75:8000/edit", {
+    const res = await fetch(`${env_path}/edit`, {
       method: "POST",
       body: formData,
       credentials: "include" 
@@ -201,32 +204,19 @@ async function handleeditSubmit(event) {
   return false;
 }
 
-
 document.querySelector(".edit-link").addEventListener("click", async (e) => {
   e.preventDefault();
-
-  try {
-    const res = await fetch("http://34.60.210.75:8000/userinfo", {
-      method: "GET",
-      credentials: "include"
-    });
-    
-    const data = await res.json();
-
-    if (res.ok) {
+  const userId = sessionStorage.getItem("user_id");
+    if (userId) {
       // 로그인 된 상태면 수정 모달 열기
       document.getElementById("edit_modal").style.display = "block";
-      document.querySelector("#edit_modal input[name='id']").value = data.user_id; // 사용자 id 채워주기
+      document.querySelector("#edit_modal input[name='id']").value = userId; // 사용자 id 채워주기
     } else {
       alert("로그인이 필요합니다.");
       window.location.reload();
     }
-  } catch (err) {
-    console.error("사용자 정보 가져오기 실패:", err);
-    alert("서버 오류 발생!");
-  }
-});
-
+  } 
+);
 
 const editModal = document.getElementById("edit_modal");
 const editCloseBtn = editModal.querySelector(".close");
@@ -311,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 (async () => {
   try {
-    const response = await fetch("http://34.60.210.75:8000/naver-news?query=전세사기&display=100");
+    const response = await fetch(`${env_path}/naver-news?query=전세사기&display=100`);
     const data = await response.json();
 
     data.items.forEach(item => {

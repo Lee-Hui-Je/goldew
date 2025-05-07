@@ -95,13 +95,14 @@ async def login(request: Request, id: str = Form(...), pw: str = Form(...)):
 # 회원 정보 수정 
 @app.post("/edit")
 async def edit(
-    request: Request,
+    id: str = Form(...),
     pw: str = Form(...),
     phone: str = Form(...),
     email: str = Form(...)
 ):
-    user_id = request.session.get('user_id')
+    user_id = id
     print(user_id)
+
     if not user_id:
         raise HTTPException(status_code=401, detail="로그인이 필요합니다.")
 
@@ -111,19 +112,13 @@ async def edit(
         return {"message": "수정 성공"}
     else:
         raise HTTPException(status_code=500, detail="수정 실패")
+
 @app.post("/logout")
 async def logout(request: Request):
     request.session.clear()
     response = JSONResponse(content={"message": "로그아웃 성공"})
     response.delete_cookie("session") 
     return response
-
-@app.get("/userinfo")
-async def userinfo(request: Request):
-    user_id = request.session.get('user_id')
-    if not user_id:
-        raise HTTPException(status_code=401, detail="로그인이 필요합니다.")
-    return {"user_id": user_id}
 
 @app.post("/trust-check")
 async def trust_check(

@@ -1,3 +1,7 @@
+import { config } from '../../config/env_config.js';
+const env = 'dev'
+const env_path = `http://${config[env].host}:${config[env].port}`
+
 const markers = []; // 마커 저장 배열
 const chartInstances = {};
 const randarChartInstances = {};
@@ -234,7 +238,7 @@ async function loadHouseKind(house_kind){
     markers.length = 0;  // 마커 배열 비우기
     markerData.length = 0;  // 데이터 배열 비우기
 
-    const response = await fetch(`http://34.60.210.75:8000/${house_kind}`);
+    const response = await fetch(`${env_path}/${house_kind}`);
     const data = await response.json();
     markerData.push(...data);
     await createMarkersInBatch(markerData);
@@ -317,7 +321,7 @@ async function fetchStreamPrompt(url, prompt, containerId) {
 
 async function house_imfo_box(id, house_kind) {
   try {
-    const res = await fetch(`http://34.60.210.75:8000/house_${house_kind}`, {
+    const res = await fetch(`${env_path}/house_${house_kind}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -426,7 +430,7 @@ async function house_imfo_box(id, house_kind) {
 
     // 7) 스트리밍 호출
     fetchStreamPrompt(
-      "http://34.60.210.75:8000/mapsummary",
+      `${env_path}/mapsummary`,
       prompt,
       "dchart_text"
     );
@@ -448,7 +452,7 @@ function uuidv4() {
 
 async function favInsert(user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type) {
   try {
-    const res = await fetch("http://34.60.210.75:8000/insert_fav", {
+    const res = await fetch(`${env_path}/insert_fav`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id,address,jeonse_price,estimated_jeonse_price,risk_level,property_id,room_type})
@@ -460,7 +464,7 @@ async function favInsert(user_id,address,jeonse_price,estimated_jeonse_price,ris
 
 async function favDelete(user_id,property_id) {
   try {
-    const res = await fetch("http://34.60.210.75:8000/delete_fav", {
+    const res = await fetch(`${env_path}/delete_fav`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ user_id,property_id})
@@ -687,7 +691,7 @@ opa_op.onclick = async() =>{
 async function fetchFavList(user_id) {
   try {
       fav_box_ul.innerHTML = "";
-      const response = await fetch("http://34.60.210.75:8000/fav_list",{
+      const response = await fetch(`${env_path}/fav_list`,{
           method:"POST",
           headers: {"Content-Type": "application/json"},
           credentials:"include",
@@ -747,7 +751,7 @@ async function fetchFavList(user_id) {
 
 async function fav_li_click(user_id, index) {
   try {
-    const res = await fetch("http://34.60.210.75:8000/fav_list",{
+    const res = await fetch(`${env_path}/fav_list`,{
       method:"POST",
       headers: {"Content-Type": "application/json"},
       credentials:"include",

@@ -1,4 +1,8 @@
-// ✅ 로봇 버튼 클릭 시 메뉴 등장 애니메이션
+// 로봇 버튼 클릭 시 메뉴 등장 애니메이션
+import { config } from '../../config/env_config.js';
+const env = 'dev'
+const env_path = `http://${config[env].host}:${config[env].port}`
+
 const ro_btn = document.querySelector(".robot-btn");
 const robot = document.querySelector(".robot");
 const text_box = document.querySelector(".text-box");
@@ -140,7 +144,7 @@ async function fetchGPT() {
   try {
     const lastUserMessage = messageHistory[messageHistory.length - 1]?.content || "";
 
-    const res = await fetch('http://34.60.210.75:8000/chat', {
+    const res = await fetch(`${env_path}/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ input: lastUserMessage, type:type ,chat_bool:chat_bool})

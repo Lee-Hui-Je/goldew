@@ -1,3 +1,7 @@
+import { config } from '../../config/env_config.js';
+const env = 'dev'
+const env_path = `http://${config[env].host}:${config[env].port}`
+
 window.addEventListener("DOMContentLoaded", () => {
   const userId = sessionStorage.getItem("user_id");
   console.log(" user_id 상태:", userId);
@@ -246,7 +250,7 @@ document.getElementById("arrow-right").addEventListener("click", () => {
 
 
 async function fetchGptSummaryStream(reasonText) {
-  const response = await fetch("http://34.60.210.75:8000/reportsummary", {
+  const response = await fetch(`${env_path}/reportsummary`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -437,7 +441,7 @@ document.getElementById("start-check-btn").addEventListener("click", async () =>
   const waitAtLeast4Sec = new Promise(res => setTimeout(res, 4000));
 
   try {
-    const fetchReport = fetch("http://34.60.210.75:8000/trust-check", {
+    const fetchReport = fetch(`${env_path}/trust-check`, {
       method: "POST",
       body: formData
     })
