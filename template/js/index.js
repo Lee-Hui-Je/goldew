@@ -45,12 +45,12 @@ const goToJoinLink = document.getElementById("go-to-join");
 // 열기
 openBtn.addEventListener("click", (e) => {
 e.preventDefault();
-modal.style.display = "block";
+modal.style.display = "flex";
 });
 
 joinOpenBtn.addEventListener("click", (e) => {
 e.preventDefault();
-joinModal.style.display = "block";
+joinModal.style.display = "flex";
 });
 
 // 닫기
@@ -209,7 +209,7 @@ document.querySelector(".edit-link").addEventListener("click", async (e) => {
   const userId = sessionStorage.getItem("user_id");
     if (userId) {
       // 로그인 된 상태면 수정 모달 열기
-      document.getElementById("edit_modal").style.display = "block";
+      document.getElementById("edit_modal").style.display = "flex";
       document.querySelector("#edit_modal input[name='id']").value = userId; // 사용자 id 채워주기
     } else {
       alert("로그인이 필요합니다.");

@@ -74,6 +74,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 // 바뀌는 값
 let house_kind = "opi" //집 종류
 
+opi.classList.add('active');
+villa.classList.remove('active');
+oneroom.classList.remove('active');
+
 // 집 유형 선택
 opi.addEventListener("click", ()=>{
   opi.classList.add('active');

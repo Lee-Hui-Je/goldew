@@ -408,7 +408,6 @@ footer {
   width: 1080px;
   height: 600px;
   background: white;
-  margin: 4% auto;
   display: flex;
   border-radius: 14px;
   overflow: hidden;
@@ -505,11 +504,10 @@ footer {
 .modal-box-join,.modal-box-edit{
   width: 500px;
   max-width: 90%;
-  height: auto;
+  height: 600px;
   background: #fdfeff;
-  margin: 5% auto;
   border-radius: 5px;
-  padding: 110px 45px;
+  padding: 40px 45px;
   box-shadow: 0 0 20px rgba(0,0,0,0.2);
   position: relative;
 
@@ -533,6 +531,8 @@ footer {
 }
 .modal {
 display: none;
+justify-content: center;
+align-items: center;
 position: fixed;
 z-index: 1000;
 left: 0; top: 0;
