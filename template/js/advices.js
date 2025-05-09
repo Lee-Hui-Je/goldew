@@ -1,6 +1,6 @@
 // 로봇 버튼 클릭 시 메뉴 등장 애니메이션
 import { config } from '../../config/env_config.js';
-const env = 'dev'
+const env = 'prd'
 const env_path = `http://${config[env].host}:${config[env].port}`
 
 const ro_btn = document.querySelector(".robot-btn");

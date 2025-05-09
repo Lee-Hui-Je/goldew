@@ -1,5 +1,5 @@
 import { config } from '../../config/env_config.js';
-const env = 'dev'
+const env = 'prd'
 const env_path = `http://${config[env].host}:${config[env].port}`
 
 window.addEventListener("DOMContentLoaded", () => {

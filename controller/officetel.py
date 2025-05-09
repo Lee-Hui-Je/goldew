@@ -15,7 +15,7 @@ from lightgbm import LGBMRegressor
 import re
 from datetime import datetime
 from tqdm import tqdm
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException, ElementNotInteractableException
 import psycopg
 import psycopg_pool
 import joblib
@@ -23,27 +23,52 @@ import os
 import shap
 from xgboost import XGBRegressor
 from catboost import CatBoostRegressor
+from selenium.webdriver.chrome.options import Options
 
 # pip install selenium pandas numpy tqdm scikit-learn lightgbm
 
+options = Options()
+options.add_argument('--headless=new')  # 새로운 Headless 모드 (구버전보다 안정적)
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--disable-gpu')  # GPU 렌더링 이슈 방지
+options.add_argument('--window-size=1920,1080')  # 뷰포트 사이즈 설정
+options.add_argument('--disable-blink-features=AutomationControlled')  # 자동화 감지 방지
+options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
+
 # 크롬 드라이버 실행
-driver = wb.Chrome()
+driver = wb.Chrome(options=options)
 url = 'https://www.dabangapp.com/map/officetel?m_lat=35.1464492&m_lng=126.8851831&m_zoom=12'
 driver.get(url)
 time.sleep(2)
 
 # 링크 수집 리스트
 href_list = []
-MAX_PAGES = 28  # 페이지 개수 제한 (필요시 조절)
+MAX_PAGES = 40  # 페이지 개수 제한 (필요시 조절)
 
 for page in range(MAX_PAGES):
     print(f"\n📄 {page+1} 페이지 수집 중...")
 
-    # 리스트 영역 스크롤
-    body = driver.find_element(By.CSS_SELECTOR, '#officetel-list')
-    for _ in range(3):
-        body.send_keys(Keys.END)
-        time.sleep(0.5)
+    # ✅ 리스트 영역 스크롤 (예외 처리 추가)
+    try:
+        body = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#officetel-list'))
+        )
+        if not body.is_displayed():
+            print("🚫 리스트 영역이 화면에 보이지 않습니다. 크롤링 종료.")
+            break
+
+        for _ in range(3):
+            try:
+                body.send_keys(Keys.END)
+                time.sleep(0.5)
+            except ElementNotInteractableException as e:
+                print(f"❌ body 요소가 상호작용할 수 없습니다. 종료합니다. {e}")
+                break
+
+    except Exception as e:
+        print(f"❌ 리스트 스크롤 중 오류 발생: {e}")
+        break
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, '#officetel-list li'))
@@ -86,7 +111,6 @@ for link in href_list:
     print(link)
 
 # 링크를 CSV로 저장
-import pandas as pd
 df = pd.DataFrame(href_list, columns=["URL"])
 df.to_csv("다방_광주_링크_오피스텔.csv", index=False)
 print("\n💾 링크 저장 완료: 다방_광주_링크_오피스텔.csv")
@@ -97,7 +121,7 @@ driver.quit()
 
 
 # 크롬 드라이버 실행
-driver = wb.Chrome()
+driver = wb.Chrome(options=options)
 
 # 링크 불러오기
 df = pd.read_csv("다방_광주_링크_오피스텔.csv")
@@ -1045,7 +1069,7 @@ df = pd.read_csv('전세예측_오피스텔_표시완료.csv').dropna()
 df['log_건축연차'] = np.log1p(df['건축연차'])
 df['log_전용면적'] = np.log1p(df['전용면적_평'])
 
-# 전체 모델 학습 피처 (13개)
+# 전체 모델 학습 피처 (15개)
 full_features = [
     '방 수', '욕실 수', '엘리베이터', '층등급',
     '건축점수', '보증보험점수', '즉시입주여부', '단기임대여부', '방향점수',
@@ -1087,15 +1111,20 @@ if isinstance(model, LGBMRegressor):
     shap_values = model.predict(X, pred_contrib=True)
     contrib_df = pd.DataFrame(shap_values[:, :-1], columns=full_features)
 
-elif isinstance(model, XGBRegressor) or isinstance(model, CatBoostRegressor):
+elif isinstance(model, XGBRegressor):
+    explainer = shap.Explainer(model, X_scaled)
+    shap_values = explainer(X_scaled)
+    contrib_df = pd.DataFrame(shap_values.values, columns=full_features)
+
+elif isinstance(model, CatBoostRegressor):
     explainer = shap.Explainer(model, X_scaled)
     shap_values = explainer(X_scaled)
     contrib_df = pd.DataFrame(shap_values.values, columns=full_features)
 
 elif isinstance(model, StackingRegressor):
-    explainer = shap.Explainer(model, X_scaled)
-    shap_values = explainer(X_scaled)
-    contrib_df = pd.DataFrame(shap_values.values, columns=full_features)
+    explainer = shap.KernelExplainer(model.predict, shap.sample(X_scaled, 100))
+    shap_values = explainer.shap_values(X_scaled)
+    contrib_df = pd.DataFrame(shap_values, columns=full_features)
 
 else:
     raise ValueError("❌ 알 수 없는 모델입니다. SHAP 계산 불가.")

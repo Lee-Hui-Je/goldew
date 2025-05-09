@@ -15,7 +15,7 @@ from lightgbm import LGBMRegressor
 import re
 from datetime import datetime
 from tqdm import tqdm
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException, ElementNotInteractableException
 import psycopg
 import psycopg_pool
 import joblib
@@ -23,29 +23,53 @@ import os
 import shap
 from xgboost import XGBRegressor
 from catboost import CatBoostRegressor
+from selenium.webdriver.chrome.options import Options
 
+options = Options()
+options.add_argument('--headless=new')  # 새로운 Headless 모드 (구버전보다 안정적)
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
+options.add_argument('--disable-gpu')  # GPU 렌더링 이슈 방지
+options.add_argument('--window-size=1920,1080')  # 뷰포트 사이즈 설정
+options.add_argument('--disable-blink-features=AutomationControlled')  # 자동화 감지 방지
+options.add_argument('user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36')
 
 
 ########### 1.링크 수집
 
-# 1-1. 크롬 드라이버 실행
-driver = wb.Chrome()
-url = 'https://www.dabangapp.com/map/house?m_lat=35.1505197&m_lng=126.9047525&m_zoom=12'
+# 크롬 드라이버 실행
+driver = wb.Chrome(options=options)
+url = 'https://dabangapp.com/map/house?m_lat=35.1437272&m_lng=126.8515969&m_zoom=12'
 driver.get(url)
 time.sleep(2)
 
-# 1-2. 링크 수집 리스트
+# 링크 수집 리스트
 href_list = []
-MAX_PAGES = 220  # 페이지 개수 제한 (필요시 조절)
+MAX_PAGES = 28  # 페이지 개수 제한 (필요시 조절)
 
 for page in range(MAX_PAGES):
     print(f"\n📄 {page+1} 페이지 수집 중...")
 
-    # 리스트 영역 스크롤
-    body = driver.find_element(By.CSS_SELECTOR, '#house-list')
-    for _ in range(3):
-        body.send_keys(Keys.END)
-        time.sleep(0.5)
+    # ✅ 리스트 영역 스크롤 (예외 처리 추가)
+    try:
+        body = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, '#house-list'))
+        )
+        if not body.is_displayed():
+            print("🚫 리스트 영역이 화면에 보이지 않습니다. 크롤링 종료.")
+            break
+
+        for _ in range(3):
+            try:
+                body.send_keys(Keys.END)
+                time.sleep(0.5)
+            except ElementNotInteractableException as e:
+                print(f"❌ body 요소가 상호작용할 수 없습니다. 종료합니다. {e}")
+                break
+
+    except Exception as e:
+        print(f"❌ 리스트 스크롤 중 오류 발생: {e}")
+        break
 
     WebDriverWait(driver, 10).until(
         EC.presence_of_all_elements_located((By.CSS_SELECTOR, '#house-list li'))
@@ -83,15 +107,16 @@ for page in range(MAX_PAGES):
         break
 
 # 결과 출력
-print(f"\n✅ 총 수집된 링크 수: {len(href_list)}")
+print(f"\n 총 수집된 링크 수: {len(href_list)}")
 for link in href_list:
     print(link)
 
-# 1-3. 링크를 CSV로 저장
-
+# 링크를 CSV로 저장
 df = pd.DataFrame(href_list, columns=["URL"])
-df.to_csv("다방_광주_링크_빌라.csv", index=False)
-print("\n💾 링크 저장 완료: 다방_광주_링크_빌라.csv")
+df.to_csv("다방_광주_링크_오피스텔.csv", index=False)
+print("\n💾 링크 저장 완료: 다방_광주_링크_오피스텔.csv")
+
+driver.quit()
 
 driver.quit()
 
@@ -99,7 +124,7 @@ driver.quit()
 
 # 옵션, 중개사무소명, 주소시도, 공급, 사용면적 합침, 엘리베이터 없음 뜨기
 # 크롬 드라이버 실행
-driver = wb.Chrome()
+driver = wb.Chrome(options=options)
 
 # 2-1. 링크 불러오기
 df = pd.read_csv("다방_광주_링크_빌라.csv")
@@ -1095,12 +1120,32 @@ elif isinstance(model, XGBRegressor) or isinstance(model, CatBoostRegressor):
     contrib_df = pd.DataFrame(shap_values.values, columns=full_features)
 
 elif isinstance(model, StackingRegressor):
-    explainer = shap.Explainer(model, X_scaled)
-    shap_values = explainer(X_scaled)
-    contrib_df = pd.DataFrame(shap_values.values, columns=full_features)
+    explainer = shap.KernelExplainer(model.predict, shap.sample(X_scaled, 100))
+    shap_values = explainer.shap_values(X_scaled)
+    contrib_df = pd.DataFrame(shap_values, columns=full_features)
 
 else:
     raise ValueError("❌ 알 수 없는 모델입니다. SHAP 계산 불가.")
+
+# # SHAP 기여도 계산
+# if isinstance(model, LGBMRegressor):
+#     shap_values = model.predict(X, pred_contrib=True)
+#     contrib_df = pd.DataFrame(shap_values[:, :-1], columns=full_features)
+
+# elif isinstance(model, XGBRegressor) or isinstance(model, CatBoostRegressor):
+#     explainer = shap.Explainer(model, X_scaled)
+#     shap_values = explainer(X_scaled)
+#     contrib_df = pd.DataFrame(shap_values.values, columns=full_features)
+
+# elif isinstance(model, StackingRegressor):
+#     # 💡 내부 모델 중 하나 선택 (예: 'lgbm')
+#     base_model = model.named_estimators_['lgbm']  # 'xgb'나 'cat'도 가능
+#     explainer = shap.Explainer(base_model, X_scaled)
+#     shap_values = explainer(X_scaled)
+#     contrib_df = pd.DataFrame(shap_values.values, columns=full_features)
+
+# else:
+#     raise ValueError("❌ 알 수 없는 모델입니다. SHAP 계산 불가.")
 
 # 필요한 피처만 선택 후 새 컬럼명으로 변경
 contrib_selected = contrib_df[target_features]
